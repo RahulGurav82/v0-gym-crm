@@ -6,7 +6,6 @@ import { useState, createContext, useContext } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import {
-  LayoutDashboard,
   Users,
   Calendar,
   DollarSign,
@@ -21,6 +20,18 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
+  ShoppingCart,
+  UserCheck,
+  ChevronDown,
+  Store,
+  CreditCard,
+  Truck,
+  Tags,
+  Star,
+  Percent,
+  ShoppingBag,
+  ClipboardList,
+  ClipboardCheck,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -30,13 +41,20 @@ interface NavItem {
   href: string
   icon: React.ComponentType<{ className?: string }>
   roles: string[]
+  children?: NavItem[]
 }
 
-const navItems: NavItem[] = [
+const crmNavItems: NavItem[] = [
   {
-    title: "Dashboard",
+    title: "CRM Dashboard",
     href: "/admin",
-    icon: LayoutDashboard,
+    icon: UserCheck,
+    roles: ["admin"],
+  },
+  {
+    title: "Enquiry",
+    href: "/admin/enquiry",
+    icon: ClipboardCheck,
     roles: ["admin", "head", "manager", "employee"],
   },
   {
@@ -76,12 +94,6 @@ const navItems: NavItem[] = [
     roles: ["admin", "head"],
   },
   {
-    title: "Inventory",
-    href: "/admin/inventory",
-    icon: Package,
-    roles: ["admin", "head", "manager"],
-  },
-  {
     title: "Messages",
     href: "/admin/messages",
     icon: MessageSquare,
@@ -92,6 +104,84 @@ const navItems: NavItem[] = [
     href: "/admin/reports",
     icon: FileText,
     roles: ["admin", "head"],
+  },
+]
+
+const ecommerceNavItems: NavItem[] = [
+  {
+    title: "Ecommerce Dashboard",
+    href: "/admin/ecommerce",
+    icon: ShoppingCart,
+    roles: ["admin"],
+  },
+  {
+    title: "Products",
+    href: "/admin/ecommerce/products",
+    icon: Package,
+    roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Orders",
+    href: "/admin/ecommerce/orders",
+    icon: ClipboardList,
+    roles: ["admin", "head", "manager", "employee"],
+  },
+  {
+    title: "Customers",
+    href: "/admin/ecommerce/customers",
+    icon: Users,
+    roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Inventory",
+    href: "/admin/ecommerce/inventory",
+    icon: Store,
+    roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Payments",
+    href: "/admin/ecommerce/payments",
+    icon: CreditCard,
+    roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Shipping",
+    href: "/admin/ecommerce/shipping",
+    icon: Truck,
+    roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Categories",
+    href: "/admin/ecommerce/categories",
+    icon: Tags,
+    roles: ["admin", "head"],
+  },
+  {
+    title: "Reviews",
+    href: "/admin/ecommerce/reviews",
+    icon: Star,
+    roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Discounts",
+    href: "/admin/ecommerce/discounts",
+    icon: Percent,
+    roles: ["admin", "head"],
+  },
+]
+
+const dashboardSwitcher = [
+  {
+    title: "CRM Dashboard",
+    href: "/admin",
+    icon: UserCheck,
+    type: "crm",
+  },
+  {
+    title: "Ecommerce Dashboard",
+    href: "/admin/ecommerce",
+    icon: ShoppingBag,
+    type: "ecommerce",
   },
 ]
 
@@ -123,7 +213,13 @@ interface SidebarProps {
 export function Sidebar({ role = "admin" }: SidebarProps) {
   const { collapsed, setCollapsed } = useSidebar()
   const pathname = usePathname()
+  const [showDashboardSwitcher, setShowDashboardSwitcher] = useState(false)
 
+  const isEcommerce = pathname.includes("/admin/ecommerce")
+  const activeDashboard = isEcommerce ? "ecommerce" : "crm"
+  const currentDashboard = dashboardSwitcher.find((d) => d.type === activeDashboard)
+
+  const navItems = activeDashboard === "ecommerce" ? ecommerceNavItems : crmNavItems
   const filteredNavItems = navItems.filter((item) => item.roles.includes(role))
 
   return (
@@ -156,11 +252,94 @@ export function Sidebar({ role = "admin" }: SidebarProps) {
         </Button>
       </div>
 
+      {role === "admin" && (
+        <div className="p-3 border-b border-border">
+          <div className="relative">
+            <Button
+              variant="outline"
+              className={cn("w-full justify-between gap-2 h-10 bg-muted/50", collapsed && "justify-center px-0")}
+              onClick={() => !collapsed && setShowDashboardSwitcher(!showDashboardSwitcher)}
+            >
+              {currentDashboard && (
+                <>
+                  <div className="flex items-center gap-2">
+                    <currentDashboard.icon className="h-4 w-4 text-primary" />
+                    {!collapsed && (
+                      <span className="text-sm font-medium">{currentDashboard.title.replace(" Dashboard", "")}</span>
+                    )}
+                  </div>
+                  {!collapsed && (
+                    <ChevronDown
+                      className={cn("h-4 w-4 transition-transform", showDashboardSwitcher && "rotate-180")}
+                    />
+                  )}
+                </>
+              )}
+            </Button>
+
+            {/* Dropdown */}
+            {!collapsed && showDashboardSwitcher && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden z-50">
+                {dashboardSwitcher.map((dashboard) => {
+                  const Icon = dashboard.icon
+                  const isActive = dashboard.type === activeDashboard
+                  return (
+                    <Link key={dashboard.href} href={dashboard.href} onClick={() => setShowDashboardSwitcher(false)}>
+                      <div
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2.5 hover:bg-muted transition-colors",
+                          isActive && "bg-primary/10 text-primary",
+                        )}
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span className="text-sm font-medium">{dashboard.title}</span>
+                        {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />}
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
+
+            {/* Collapsed state dropdown */}
+            {collapsed && (
+              <div className="mt-1 space-y-1">
+                {dashboardSwitcher.map((dashboard) => {
+                  const Icon = dashboard.icon
+                  const isActive = dashboard.type === activeDashboard
+                  return (
+                    <Link key={dashboard.href} href={dashboard.href}>
+                      <Button
+                        variant={isActive ? "secondary" : "ghost"}
+                        className={cn(
+                          "w-full justify-center px-0 h-9",
+                          isActive && "bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary",
+                        )}
+                        title={dashboard.title}
+                      >
+                        <Icon className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-3 overflow-y-auto h-[calc(100vh-8rem)]">
+      <nav className="flex-1 space-y-1 p-3 overflow-y-auto h-[calc(100vh-12rem)]">
+        {!collapsed && (
+          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-3 mb-2">
+            {activeDashboard === "ecommerce" ? "Store Management" : "Gym Management"}
+          </p>
+        )}
+
         {filteredNavItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href
+
           return (
             <Link key={item.href} href={item.href}>
               <Button
@@ -193,16 +372,18 @@ export function Sidebar({ role = "admin" }: SidebarProps) {
             {!collapsed && <span className="text-sm font-medium">Settings</span>}
           </Button>
         </Link>
-        <Button
-          variant="ghost"
-          className={cn(
-            "w-full justify-start gap-3 h-10 text-destructive hover:text-destructive hover:bg-destructive/10",
-            collapsed && "justify-center px-0",
-          )}
-        >
-          <LogOut className="h-5 w-5" />
-          {!collapsed && <span className="text-sm font-medium">Logout</span>}
-        </Button>
+        <Link href="/">
+          <Button
+            variant="ghost"
+            className={cn(
+              "w-full justify-start gap-3 h-10 text-destructive hover:text-destructive hover:bg-destructive/10",
+              collapsed && "justify-center px-0",
+            )}
+          >
+            <LogOut className="h-5 w-5" />
+            {!collapsed && <span className="text-sm font-medium">Logout</span>}
+          </Button>
+        </Link>
       </div>
     </aside>
   )
