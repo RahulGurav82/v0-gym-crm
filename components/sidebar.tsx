@@ -32,6 +32,7 @@ import {
   ShoppingBag,
   ClipboardList,
   ClipboardCheck,
+  Box,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -62,6 +63,12 @@ const crmNavItems: NavItem[] = [
     href: "/admin/members",
     icon: Users,
     roles: ["admin", "head", "manager", "employee"],
+  },
+  {
+    title: "Packages",
+    href: "/admin/packages",
+    icon: Box,
+    roles: ["admin", "head", "manager"],
   },
   {
     title: "Schedule",
