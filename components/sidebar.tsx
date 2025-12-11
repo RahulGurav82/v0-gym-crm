@@ -34,9 +34,14 @@ import {
   ClipboardCheck,
   Box,
   ListTodo,
+  CalendarDays,
+  Receipt,
+  Building2,
+  User,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { Badge } from "@/components/ui/badge"
 
 interface NavItem {
   title: string
@@ -84,10 +89,28 @@ const crmNavItems: NavItem[] = [
     roles: ["employee"],
   },
   {
+    title: "My Leaves",
+    href: "/employee/leaves",
+    icon: CalendarDays,
+    roles: ["employee"],
+  },
+  {
     title: "Packages",
     href: "/admin/packages",
     icon: Box,
     roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Calendar",
+    href: "/admin/calendar",
+    icon: CalendarDays,
+    roles: ["admin", "head"],
+  },
+  {
+    title: "Departments",
+    href: "/admin/departments",
+    icon: Building2,
+    roles: ["admin", "head"],
   },
   {
     title: "Schedule",
@@ -99,6 +122,12 @@ const crmNavItems: NavItem[] = [
     title: "Billing",
     href: "/admin/billing",
     icon: DollarSign,
+    roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Invoices",
+    href: "/admin/invoices",
+    icon: Receipt,
     roles: ["admin", "head", "manager"],
   },
   {
@@ -234,9 +263,10 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
 
 interface SidebarProps {
   role?: string
+  unreadNotifications?: number
 }
 
-export function Sidebar({ role = "admin" }: SidebarProps) {
+export function Sidebar({ role = "admin", unreadNotifications = 4 }: SidebarProps) {
   const { collapsed, setCollapsed } = useSidebar()
   const pathname = usePathname()
   const [showDashboardSwitcher, setShowDashboardSwitcher] = useState(false)
@@ -386,10 +416,44 @@ export function Sidebar({ role = "admin" }: SidebarProps) {
 
       {/* Footer */}
       <div className="border-t border-border p-3 space-y-1">
-        <Link href="/admin/notifications">
+        <Link
+          href={
+            role === "admin"
+              ? "/admin/profile"
+              : role === "head"
+                ? "/head/profile"
+                : role === "manager"
+                  ? "/manager/profile"
+                  : "/employee/profile"
+          }
+        >
           <Button variant="ghost" className={cn("w-full justify-start gap-3 h-10", collapsed && "justify-center px-0")}>
-            <Bell className="h-5 w-5" />
+            <User className="h-5 w-5" />
+            {!collapsed && <span className="text-sm font-medium">Profile</span>}
+          </Button>
+        </Link>
+        <Link href="/admin/notifications">
+          <Button
+            variant="ghost"
+            className={cn("w-full justify-start gap-3 h-10 relative", collapsed && "justify-center px-0")}
+          >
+            <div className="relative">
+              <Bell className="h-5 w-5" />
+              {unreadNotifications > 0 && (
+                <span
+                  className={cn(
+                    "absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold rounded-full bg-primary text-primary-foreground",
+                    collapsed && "-top-1 -right-1",
+                  )}
+                >
+                  {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                </span>
+              )}
+            </div>
             {!collapsed && <span className="text-sm font-medium">Notifications</span>}
+            {!collapsed && unreadNotifications > 0 && (
+              <Badge className="ml-auto bg-primary text-primary-foreground h-5 px-1.5">{unreadNotifications}</Badge>
+            )}
           </Button>
         </Link>
         <Link href="/admin/settings">

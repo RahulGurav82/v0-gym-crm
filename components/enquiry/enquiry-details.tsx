@@ -201,7 +201,6 @@ function EnquiryDetailsInner({ enquiryId }: { enquiryId: string }) {
   const enquiry = getEnquiryById(enquiryId)
   const [activeTab, setActiveTab] = useState("overview")
   const [showAddFollowUp, setShowAddFollowUp] = useState(false)
-  const [showAddSubscription, setShowAddSubscription] = useState(false)
   const [showMarkWon, setShowMarkWon] = useState(false)
   const [showMarkLost, setShowMarkLost] = useState(false)
   const [followUpData, setFollowUpData] = useState({
@@ -312,6 +311,17 @@ function EnquiryDetailsInner({ enquiryId }: { enquiryId: string }) {
     }
   }
 
+  const handleAddSubscription = () => {
+    const params = new URLSearchParams({
+      type: "enquiry",
+      id: enquiry.id,
+      name: enquiry.name,
+      phone: enquiry.phone,
+      email: enquiry.email,
+    })
+    router.push(`/admin/billing?${params.toString()}`)
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Sidebar role="admin" />
@@ -391,7 +401,7 @@ function EnquiryDetailsInner({ enquiryId }: { enquiryId: string }) {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <Button className="gap-2 bg-primary hover:bg-primary/90" onClick={() => setShowAddSubscription(true)}>
+                  <Button className="gap-2 bg-primary hover:bg-primary/90" onClick={handleAddSubscription}>
                     <CreditCard className="w-4 h-4" />
                     Add Subscription
                   </Button>
@@ -868,7 +878,7 @@ function EnquiryDetailsInner({ enquiryId }: { enquiryId: string }) {
                   <CardContent className="space-y-3">
                     <Button
                       className="w-full justify-start gap-3 bg-primary hover:bg-primary/90"
-                      onClick={() => setShowAddSubscription(true)}
+                      onClick={handleAddSubscription}
                     >
                       <CreditCard className="w-4 h-4" />
                       Add Subscription
@@ -1058,7 +1068,10 @@ function EnquiryDetailsInner({ enquiryId }: { enquiryId: string }) {
       </Dialog>
 
       {/* Add Subscription Dialog */}
-      <Dialog open={showAddSubscription} onOpenChange={setShowAddSubscription}>
+      {/* Remove Add Subscription Dialog as we redirect */}
+      <Dialog open={false} onOpenChange={() => {}}>
+        {" "}
+        {/* This dialog is now unused */}
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Add Subscription</DialogTitle>
@@ -1160,10 +1173,10 @@ function EnquiryDetailsInner({ enquiryId }: { enquiryId: string }) {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddSubscription(false)}>
+            <Button variant="outline" onClick={() => {}}>
               Cancel
             </Button>
-            <Button className="bg-primary hover:bg-primary/90" onClick={() => setShowAddSubscription(false)}>
+            <Button className="bg-primary hover:bg-primary/90" onClick={() => {}}>
               Create Membership
             </Button>
           </DialogFooter>
