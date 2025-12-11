@@ -33,6 +33,7 @@ import {
   ClipboardList,
   ClipboardCheck,
   Box,
+  ListTodo,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -50,7 +51,7 @@ const crmNavItems: NavItem[] = [
     title: "CRM Dashboard",
     href: "/admin",
     icon: UserCheck,
-    roles: ["admin"],
+    roles: ["admin", "head"],
   },
   {
     title: "Enquiry",
@@ -63,6 +64,12 @@ const crmNavItems: NavItem[] = [
     href: "/admin/members",
     icon: Users,
     roles: ["admin", "head", "manager", "employee"],
+  },
+  {
+    title: "Tasks",
+    href: "/admin/tasks",
+    icon: ListTodo,
+    roles: ["admin", "head", "manager"],
   },
   {
     title: "Packages",
@@ -119,7 +126,7 @@ const ecommerceNavItems: NavItem[] = [
     title: "Ecommerce Dashboard",
     href: "/admin/ecommerce",
     icon: ShoppingCart,
-    roles: ["admin"],
+    roles: ["admin", "head"],
   },
   {
     title: "Products",
@@ -259,7 +266,7 @@ export function Sidebar({ role = "admin" }: SidebarProps) {
         </Button>
       </div>
 
-      {role === "admin" && (
+      {(role === "admin" || role === "head") && (
         <div className="p-3 border-b border-border">
           <div className="relative">
             <Button

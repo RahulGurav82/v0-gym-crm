@@ -26,12 +26,16 @@ export function LoginForm() {
 
   const handleVerifyOtp = (e: React.FormEvent) => {
     e.preventDefault()
-    // Redirect based on role
     console.log("[v0] Verifying OTP:", otp, "for role:", selectedRole)
     if (selectedRole === "admin") {
       window.location.href = "/admin"
+    } else if (selectedRole === "head") {
+      window.location.href = "/head"
+    } else if (selectedRole === "manager") {
+      window.location.href = "/manager"
+    } else if (selectedRole === "employee") {
+      window.location.href = "/employee"
     }
-    // Add other role redirects here later
   }
 
   return (
