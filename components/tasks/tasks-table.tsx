@@ -28,6 +28,7 @@ import {
   AlertTriangle,
   Calendar,
   Users,
+  UserPlus,
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -55,10 +56,7 @@ const mockTasks: Task[] = [
     description: "Contact all new enquiries from last week and schedule gym tours",
     priority: "high",
     status: "in-progress",
-    assignees: [
-      { name: "John Smith", avatar: "", role: "Sales Executive" },
-      { name: "Jessica Martinez", avatar: "", role: "Sales Executive" },
-    ],
+    assignees: [{ name: "John Smith", avatar: "", role: "Sales Executive" }],
     dueDate: "2024-01-15",
     createdAt: "2024-01-10",
     category: "Sales",
@@ -69,7 +67,7 @@ const mockTasks: Task[] = [
     description: "Verify and update all member contact information in the system",
     priority: "medium",
     status: "pending",
-    assignees: [{ name: "Sarah Wilson", avatar: "", role: "Admin Staff" }],
+    assignees: [],
     dueDate: "2024-01-18",
     createdAt: "2024-01-11",
     category: "Admin",
@@ -80,10 +78,7 @@ const mockTasks: Task[] = [
     description: "Compile sales and membership data for January report",
     priority: "high",
     status: "pending",
-    assignees: [
-      { name: "Mike Johnson", avatar: "", role: "Manager" },
-      { name: "Amanda White", avatar: "", role: "Manager" },
-    ],
+    assignees: [{ name: "Mike Johnson", avatar: "", role: "Manager" }],
     dueDate: "2024-01-20",
     createdAt: "2024-01-12",
     category: "Reports",
@@ -105,10 +100,7 @@ const mockTasks: Task[] = [
     description: "Book fitness assessments for all new premium members",
     priority: "medium",
     status: "completed",
-    assignees: [
-      { name: "Emily Brown", avatar: "", role: "Trainer" },
-      { name: "Robert Taylor", avatar: "", role: "Trainer" },
-    ],
+    assignees: [{ name: "Emily Brown", avatar: "", role: "Trainer" }],
     dueDate: "2024-01-14",
     createdAt: "2024-01-08",
     category: "Training",
@@ -119,11 +111,7 @@ const mockTasks: Task[] = [
     description: "Contact members with expiring memberships for renewals",
     priority: "high",
     status: "in-progress",
-    assignees: [
-      { name: "John Smith", avatar: "", role: "Sales Executive" },
-      { name: "Sarah Wilson", avatar: "", role: "Admin Staff" },
-      { name: "Lisa Chen", avatar: "", role: "Receptionist" },
-    ],
+    assignees: [],
     dueDate: "2024-01-16",
     createdAt: "2024-01-09",
     category: "Sales",
@@ -145,12 +133,7 @@ const mockTasks: Task[] = [
     description: "Conduct orientation training for 3 new hires",
     priority: "medium",
     status: "in-progress",
-    assignees: [
-      { name: "Mike Johnson", avatar: "", role: "Manager" },
-      { name: "Emily Brown", avatar: "", role: "Trainer" },
-      { name: "Robert Taylor", avatar: "", role: "Trainer" },
-      { name: "Amanda White", avatar: "", role: "Manager" },
-    ],
+    assignees: [],
     dueDate: "2024-01-19",
     createdAt: "2024-01-11",
     category: "HR",
@@ -172,10 +155,7 @@ const mockTasks: Task[] = [
     description: "Create and post content for new year membership offers",
     priority: "high",
     status: "completed",
-    assignees: [
-      { name: "Emily Brown", avatar: "", role: "Marketing" },
-      { name: "Jessica Martinez", avatar: "", role: "Sales Executive" },
-    ],
+    assignees: [{ name: "Emily Brown", avatar: "", role: "Marketing" }],
     dueDate: "2024-01-12",
     createdAt: "2024-01-06",
     category: "Marketing",
@@ -188,9 +168,17 @@ interface TasksTableProps {
   priorityFilter: string
   assigneeFilter: string
   dateFilter: string
+  onAssignEmployee?: (taskId: string) => void
 }
 
-export function TasksTable({ searchQuery, statusFilter, priorityFilter, assigneeFilter, dateFilter }: TasksTableProps) {
+export function TasksTable({
+  searchQuery,
+  statusFilter,
+  priorityFilter,
+  assigneeFilter,
+  dateFilter,
+  onAssignEmployee,
+}: TasksTableProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [selectedTasks, setSelectedTasks] = useState<string[]>([])
@@ -204,8 +192,10 @@ export function TasksTable({ searchQuery, statusFilter, priorityFilter, assignee
 
     const matchesStatus = statusFilter === "all" || task.status === statusFilter
     const matchesPriority = priorityFilter === "all" || task.priority === priorityFilter
+
     const matchesAssignee =
       assigneeFilter === "all" ||
+      (assigneeFilter === "unassigned" && task.assignees.length === 0) ||
       task.assignees.some((a) => a.name.toLowerCase().includes(assigneeFilter.toLowerCase()))
 
     return matchesSearch && matchesStatus && matchesPriority && matchesAssignee
@@ -286,7 +276,7 @@ export function TasksTable({ searchQuery, statusFilter, priorityFilter, assignee
                 <TableHead className="font-semibold">Task</TableHead>
                 <TableHead className="font-semibold">Priority</TableHead>
                 <TableHead className="font-semibold">Status</TableHead>
-                <TableHead className="font-semibold">Assignees</TableHead>
+                <TableHead className="font-semibold">Assignee</TableHead>
                 <TableHead className="font-semibold">Due Date</TableHead>
                 <TableHead className="font-semibold">Category</TableHead>
                 <TableHead className="w-12"></TableHead>
@@ -315,55 +305,69 @@ export function TasksTable({ searchQuery, statusFilter, priorityFilter, assignee
                   <TableCell>{getPriorityBadge(task.priority)}</TableCell>
                   <TableCell>{getStatusBadge(task.status)}</TableCell>
                   <TableCell>
-                    <TooltipProvider>
-                      <div className="flex items-center">
-                        <div className="flex -space-x-2">
-                          {task.assignees.slice(0, 3).map((assignee, index) => (
-                            <Tooltip key={index}>
-                              <TooltipTrigger asChild>
-                                <Avatar className="h-8 w-8 border-2 border-background">
-                                  <AvatarImage src={assignee.avatar || "/placeholder.svg"} />
-                                  <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                                    {assignee.name
-                                      .split(" ")
-                                      .map((n) => n[0])
-                                      .join("")}
-                                  </AvatarFallback>
-                                </Avatar>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p className="font-medium">{assignee.name}</p>
-                                <p className="text-xs text-muted-foreground">{assignee.role}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          ))}
-                          {task.assignees.length > 3 && (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <div className="h-8 w-8 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center">
-                                  <span className="text-xs font-medium text-primary">+{task.assignees.length - 3}</span>
-                                </div>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <div className="space-y-1">
-                                  {task.assignees.slice(3).map((assignee, index) => (
-                                    <p key={index} className="text-sm">
-                                      {assignee.name}
-                                    </p>
-                                  ))}
-                                </div>
-                              </TooltipContent>
-                            </Tooltip>
+                    {task.assignees.length === 0 ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs gap-1.5 text-muted-foreground hover:text-foreground bg-transparent"
+                        onClick={() => onAssignEmployee?.(task.id)}
+                      >
+                        <UserPlus className="h-3.5 w-3.5" />
+                        Assign
+                      </Button>
+                    ) : (
+                      <TooltipProvider>
+                        <div className="flex items-center">
+                          <div className="flex -space-x-2">
+                            {task.assignees.slice(0, 3).map((assignee, index) => (
+                              <Tooltip key={index}>
+                                <TooltipTrigger asChild>
+                                  <Avatar className="h-8 w-8 border-2 border-background">
+                                    <AvatarImage src={assignee.avatar || "/placeholder.svg"} />
+                                    <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                                      {assignee.name
+                                        .split(" ")
+                                        .map((n) => n[0])
+                                        .join("")}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="font-medium">{assignee.name}</p>
+                                  <p className="text-xs text-muted-foreground">{assignee.role}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            ))}
+                            {task.assignees.length > 3 && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <div className="h-8 w-8 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center">
+                                    <span className="text-xs font-medium text-primary">
+                                      +{task.assignees.length - 3}
+                                    </span>
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <div className="space-y-1">
+                                    {task.assignees.slice(3).map((assignee, index) => (
+                                      <p key={index} className="text-sm">
+                                        {assignee.name}
+                                      </p>
+                                    ))}
+                                  </div>
+                                </TooltipContent>
+                              </Tooltip>
+                            )}
+                          </div>
+                          {task.assignees.length > 1 && (
+                            <span className="ml-2 text-xs text-muted-foreground flex items-center gap-1">
+                              <Users className="h-3 w-3" />
+                              {task.assignees.length}
+                            </span>
                           )}
                         </div>
-                        {task.assignees.length > 1 && (
-                          <span className="ml-2 text-xs text-muted-foreground flex items-center gap-1">
-                            <Users className="h-3 w-3" />
-                            {task.assignees.length}
-                          </span>
-                        )}
-                      </div>
-                    </TooltipProvider>
+                      </TooltipProvider>
+                    )}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1.5 text-sm">
@@ -395,6 +399,10 @@ export function TasksTable({ searchQuery, statusFilter, priorityFilter, assignee
                         <DropdownMenuItem>
                           <Edit className="mr-2 h-4 w-4" />
                           Edit Task
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onAssignEmployee?.(task.id)}>
+                          <UserPlus className="mr-2 h-4 w-4" />
+                          Assign Employee
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <CheckCircle2 className="mr-2 h-4 w-4" />

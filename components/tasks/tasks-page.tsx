@@ -6,11 +6,12 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
-import { Search, Plus, ListTodo, CheckCircle2, Clock, AlertCircle } from "lucide-react"
+import { Search, Plus, ListTodo, CheckCircle2, Clock, AlertCircle, Users } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { TasksTable } from "./tasks-table"
 import { AddTaskForm } from "./add-task-form"
+import { AssignEmployeeForm } from "./assign-employee-form"
 
 function TasksPageContent() {
   const { collapsed } = useSidebar()
@@ -20,6 +21,8 @@ function TasksPageContent() {
   const [assigneeFilter, setAssigneeFilter] = useState("all")
   const [dateFilter, setDateFilter] = useState("all")
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false)
+  const [isAssignEmployeeOpen, setIsAssignEmployeeOpen] = useState(false)
+  const [taskToAssign, setTaskToAssign] = useState("")
 
   const stats = [
     {
@@ -52,6 +55,19 @@ function TasksPageContent() {
     },
   ]
 
+  const handleTaskCreated = (taskId: string) => {
+    setIsAddTaskOpen(false)
+    if (taskId) {
+      setTaskToAssign(taskId)
+      setIsAssignEmployeeOpen(true)
+    }
+  }
+
+  const handleAssignFromTable = (taskId: string) => {
+    setTaskToAssign(taskId)
+    setIsAssignEmployeeOpen(true)
+  }
+
   return (
     <div className={`min-h-screen bg-background transition-all duration-300 ${collapsed ? "pl-16" : "pl-64"}`}>
       <Sidebar role="admin" />
@@ -80,11 +96,29 @@ function TasksPageContent() {
                   Create New Task
                 </DialogTitle>
               </DialogHeader>
-              <AddTaskForm onSuccess={() => setIsAddTaskOpen(false)} />
+              <AddTaskForm onSuccess={handleTaskCreated} />
             </DialogContent>
           </Dialog>
         </div>
       </header>
+
+      <Dialog open={isAssignEmployeeOpen} onOpenChange={setIsAssignEmployeeOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Users className="h-5 w-5 text-primary" />
+              </div>
+              Assign Employee
+            </DialogTitle>
+          </DialogHeader>
+          <AssignEmployeeForm
+            taskId={taskToAssign}
+            onSuccess={() => setIsAssignEmployeeOpen(false)}
+            onCancel={() => setIsAssignEmployeeOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
 
       {/* Main Content */}
       <main className="p-6 space-y-6">
@@ -159,6 +193,7 @@ function TasksPageContent() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Employees</SelectItem>
+                    <SelectItem value="unassigned">Unassigned</SelectItem>
                     <SelectItem value="john">John Smith</SelectItem>
                     <SelectItem value="sarah">Sarah Wilson</SelectItem>
                     <SelectItem value="mike">Mike Johnson</SelectItem>
@@ -191,6 +226,7 @@ function TasksPageContent() {
           priorityFilter={priorityFilter}
           assigneeFilter={assigneeFilter}
           dateFilter={dateFilter}
+          onAssignEmployee={handleAssignFromTable}
         />
       </main>
     </div>

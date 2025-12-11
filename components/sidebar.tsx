@@ -72,6 +72,18 @@ const crmNavItems: NavItem[] = [
     roles: ["admin", "head", "manager"],
   },
   {
+    title: "My Tasks",
+    href: "/employee/tasks",
+    icon: ListTodo,
+    roles: ["employee"],
+  },
+  {
+    title: "Attendance",
+    href: "/employee/attendance",
+    icon: Calendar,
+    roles: ["employee"],
+  },
+  {
     title: "Packages",
     href: "/admin/packages",
     icon: Box,
