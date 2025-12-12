@@ -38,6 +38,7 @@ import {
   Receipt,
   Building2,
   User,
+  GraduationCap,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -99,6 +100,12 @@ const crmNavItems: NavItem[] = [
     href: "/admin/packages",
     icon: Box,
     roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Classes",
+    href: "/admin/classes",
+    icon: GraduationCap,
+    roles: ["admin", "head"],
   },
   {
     title: "Calendar",
