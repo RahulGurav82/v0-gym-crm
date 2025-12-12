@@ -39,6 +39,7 @@ import {
   Building2,
   User,
   GraduationCap,
+  Clock,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -96,6 +97,24 @@ const crmNavItems: NavItem[] = [
     roles: ["employee"],
   },
   {
+    title: "Leave Management",
+    href: "/manager/leaves",
+    icon: CalendarDays,
+    roles: ["manager"],
+  },
+  {
+    title: "OT Management",
+    href: "/manager/overtime",
+    icon: Clock,
+    roles: ["manager"],
+  },
+  {
+    title: "OT Requests",
+    href: "/employee/overtime",
+    icon: Clock,
+    roles: ["employee"],
+  },
+  {
     title: "Packages",
     href: "/admin/packages",
     icon: Box,
@@ -111,7 +130,7 @@ const crmNavItems: NavItem[] = [
     title: "Calendar",
     href: "/admin/calendar",
     icon: CalendarDays,
-    roles: ["admin", "head"],
+    roles: ["admin", "head", "manager", "employee"],
   },
   {
     title: "Departments",
