@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { BRANCHES } from "@/lib/branches"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -82,11 +83,11 @@ export function LoginForm() {
                     <SelectValue placeholder="Choose your branch" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="downtown">Downtown Branch</SelectItem>
-                    <SelectItem value="westside">Westside Branch</SelectItem>
-                    <SelectItem value="eastside">Eastside Branch</SelectItem>
-                    <SelectItem value="northside">Northside Branch</SelectItem>
-                    <SelectItem value="southside">Southside Branch</SelectItem>
+                    {BRANCHES.map((branch) => (
+                      <SelectItem key={branch.id} value={branch.id}>
+                        {branch.name} ({branch.branchCode})
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

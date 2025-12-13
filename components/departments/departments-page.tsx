@@ -1,11 +1,13 @@
 "use client"
 
+import { CardHeader } from "@/components/ui/card"
+
 import { useState } from "react"
 import { useSidebar, Sidebar } from "@/components/sidebar"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -38,6 +40,7 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react"
+import { BRANCHES } from "@/lib/branches"
 
 interface Department {
   id: string
@@ -51,20 +54,13 @@ interface Department {
   createdAt: string
 }
 
-const branches = [
-  { id: "BR001", name: "Downtown Fitness" },
-  { id: "BR002", name: "Westside Gym" },
-  { id: "BR003", name: "Central Health Club" },
-  { id: "BR004", name: "Eastside Fitness" },
-]
-
 const initialDepartments: Department[] = [
   {
     id: "1",
     code: "DEP-001",
     name: "Management",
-    branch: "Downtown Fitness",
-    branchId: "BR001",
+    branch: "Ghansoli",
+    branchId: "YajpA3SoiaWY3xjx9CAX",
     workingHours: 8,
     staffCount: 5,
     status: "active",
@@ -74,8 +70,8 @@ const initialDepartments: Department[] = [
     id: "2",
     code: "DEP-002",
     name: "Training",
-    branch: "Downtown Fitness",
-    branchId: "BR001",
+    branch: "Ghansoli",
+    branchId: "YajpA3SoiaWY3xjx9CAX",
     workingHours: 10,
     staffCount: 12,
     status: "active",
@@ -85,8 +81,8 @@ const initialDepartments: Department[] = [
     id: "3",
     code: "DEP-003",
     name: "Sales",
-    branch: "Westside Gym",
-    branchId: "BR002",
+    branch: "Nerul",
+    branchId: "gvDFxqGIHoCBIiANZ0Lm",
     workingHours: 9,
     staffCount: 8,
     status: "active",
@@ -96,8 +92,8 @@ const initialDepartments: Department[] = [
     id: "4",
     code: "DEP-004",
     name: "Reception",
-    branch: "Downtown Fitness",
-    branchId: "BR001",
+    branch: "Ulwe",
+    branchId: "18gIrEyeVVFc7iQwC3EG",
     workingHours: 12,
     staffCount: 4,
     status: "active",
@@ -107,8 +103,8 @@ const initialDepartments: Department[] = [
     id: "5",
     code: "DEP-005",
     name: "Maintenance",
-    branch: "Central Health Club",
-    branchId: "BR003",
+    branch: "Sanpada",
+    branchId: "jJOQdxbfc1IneoEt4A9F",
     workingHours: 8,
     staffCount: 3,
     status: "active",
@@ -118,8 +114,8 @@ const initialDepartments: Department[] = [
     id: "6",
     code: "DEP-006",
     name: "Housekeeping",
-    branch: "Westside Gym",
-    branchId: "BR002",
+    branch: "Nerul",
+    branchId: "gvDFxqGIHoCBIiANZ0Lm",
     workingHours: 8,
     staffCount: 6,
     status: "inactive",
@@ -129,8 +125,8 @@ const initialDepartments: Department[] = [
     id: "7",
     code: "DEP-007",
     name: "Training",
-    branch: "Central Health Club",
-    branchId: "BR003",
+    branch: "Ulwe",
+    branchId: "18gIrEyeVVFc7iQwC3EG",
     workingHours: 10,
     staffCount: 15,
     status: "active",
@@ -140,8 +136,8 @@ const initialDepartments: Department[] = [
     id: "8",
     code: "DEP-008",
     name: "Nutrition",
-    branch: "Downtown Fitness",
-    branchId: "BR001",
+    branch: "Ghansoli",
+    branchId: "YajpA3SoiaWY3xjx9CAX",
     workingHours: 6,
     staffCount: 2,
     status: "active",
@@ -162,7 +158,7 @@ function DepartmentsPageInner() {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [newDepartment, setNewDepartment] = useState({
     name: "",
-    branch: "",
+    branchId: "",
     workingHours: "",
   })
 
@@ -184,7 +180,7 @@ function DepartmentsPageInner() {
       dept.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
       dept.branch.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesStatus = statusFilter === "all" || dept.status === statusFilter
-    const matchesBranch = branchFilter === "all" || dept.branchId === branchFilter
+    const matchesBranch = branchFilter === "all" || dept.branch === branchFilter
     return matchesSearch && matchesStatus && matchesBranch
   })
 
@@ -201,7 +197,7 @@ function DepartmentsPageInner() {
 
   // Add department
   const handleAddDepartment = () => {
-    const selectedBranch = branches.find((b) => b.id === newDepartment.branch)
+    const selectedBranch = BRANCHES.find((b) => b.id === newDepartment.branchId)
     if (!selectedBranch || !newDepartment.name || !newDepartment.workingHours) return
 
     const newDept: Department = {
@@ -217,7 +213,7 @@ function DepartmentsPageInner() {
     }
 
     setDepartments([...departments, newDept])
-    setNewDepartment({ name: "", branch: "", workingHours: "" })
+    setNewDepartment({ name: "", branchId: "", workingHours: "" })
     setShowAddDialog(false)
   }
 
@@ -278,16 +274,22 @@ function DepartmentsPageInner() {
                       Select Branch <span className="text-destructive">*</span>
                     </Label>
                     <Select
-                      value={newDepartment.branch}
-                      onValueChange={(value) => setNewDepartment({ ...newDepartment, branch: value })}
+                      value={newDepartment.branchId}
+                      onValueChange={(value) =>
+                        setNewDepartment({
+                          ...newDepartment,
+                          branchId: value,
+                          branch: BRANCHES.find((b) => b.id === value)?.name || "",
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Branch" />
                       </SelectTrigger>
                       <SelectContent>
-                        {branches.map((branch) => (
+                        {BRANCHES.map((branch) => (
                           <SelectItem key={branch.id} value={branch.id}>
-                            {branch.name}
+                            {branch.name} ({branch.branchCode})
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -334,7 +336,7 @@ function DepartmentsPageInner() {
                   </Button>
                   <Button
                     onClick={handleAddDepartment}
-                    disabled={!newDepartment.name || !newDepartment.branch || !newDepartment.workingHours}
+                    disabled={!newDepartment.name || !newDepartment.branchId || !newDepartment.workingHours}
                   >
                     Create Department
                   </Button>
@@ -407,7 +409,7 @@ function DepartmentsPageInner() {
           <Card>
             <CardHeader className="pb-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <CardTitle className="text-lg">All Departments</CardTitle>
+                <h1 className="text-lg font-semibold">All Departments</h1>
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -429,13 +431,13 @@ function DepartmentsPageInner() {
                     </SelectContent>
                   </Select>
                   <Select value={branchFilter} onValueChange={setBranchFilter}>
-                    <SelectTrigger className="w-44">
-                      <SelectValue placeholder="Branch" />
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="All Branches" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Branches</SelectItem>
-                      {branches.map((branch) => (
-                        <SelectItem key={branch.id} value={branch.id}>
+                      {BRANCHES.map((branch) => (
+                        <SelectItem key={branch.id} value={branch.name}>
                           {branch.name}
                         </SelectItem>
                       ))}
@@ -658,7 +660,7 @@ function DepartmentsPageInner() {
                   <Select
                     value={editingDepartment.branchId}
                     onValueChange={(value) => {
-                      const selectedBranch = branches.find((b) => b.id === value)
+                      const selectedBranch = BRANCHES.find((b) => b.id === value)
                       if (selectedBranch) {
                         setEditingDepartment({
                           ...editingDepartment,
@@ -672,9 +674,9 @@ function DepartmentsPageInner() {
                       <SelectValue placeholder="Select Branch" />
                     </SelectTrigger>
                     <SelectContent>
-                      {branches.map((branch) => (
+                      {BRANCHES.map((branch) => (
                         <SelectItem key={branch.id} value={branch.id}>
-                          {branch.name}
+                          {branch.name} ({branch.branchCode})
                         </SelectItem>
                       ))}
                     </SelectContent>
