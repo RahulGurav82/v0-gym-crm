@@ -109,6 +109,18 @@ const crmNavItems: NavItem[] = [
     roles: ["manager"],
   },
   {
+    title: "Shift Management",
+    href: "/manager/shifts",
+    icon: Calendar,
+    roles: ["manager"],
+  },
+  {
+    title: "Mark Attendance",
+    href: "/manager/mark-attendance",
+    icon: UserCheck,
+    roles: ["manager"],
+  },
+  {
     title: "OT Requests",
     href: "/employee/overtime",
     icon: Clock,
