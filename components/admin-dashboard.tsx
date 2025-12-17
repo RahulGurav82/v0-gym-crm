@@ -12,7 +12,8 @@ import { MemberGrowthChart } from "@/components/member-growth-chart"
 import { RevenueChart } from "@/components/revenue-chart"
 import { AttendanceChart } from "@/components/attendance-chart"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Sidebar, SidebarProvider, useSidebar } from "@/components/sidebar"
+import { Sidebar, SidebarProvider, useSidebar, MobileMenuButton } from "@/components/sidebar"
+import { cn } from "@/lib/utils"
 
 function DashboardContent() {
   const { collapsed } = useSidebar()
@@ -21,17 +22,20 @@ function DashboardContent() {
     <div className="min-h-screen bg-background">
       <Sidebar role="admin" />
 
-      <div className={`transition-all duration-300 ${collapsed ? "pl-16" : "pl-64"}`}>
+      <div className={cn("transition-all duration-300", collapsed ? "lg:pl-16" : "lg:pl-64")}>
         {/* Header */}
         <header className="border-b border-border bg-card sticky top-0 z-30">
-          <div className="flex items-center justify-between px-6 py-4">
-            <div>
-              <h1 className="text-xl font-semibold">Dashboard</h1>
-              <p className="text-sm text-muted-foreground">Welcome back, Admin</p>
+          <div className="flex items-center justify-between px-4 lg:px-6 py-4">
+            <div className="flex items-center gap-3">
+              <MobileMenuButton />
+              <div>
+                <h1 className="text-xl font-semibold">Dashboard</h1>
+                <p className="text-sm text-muted-foreground hidden sm:block">Welcome back, Admin</p>
+              </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <Badge variant="secondary" className="text-xs">
+            <div className="flex items-center gap-2 lg:gap-4">
+              <Badge variant="secondary" className="text-xs hidden sm:inline-flex">
                 Downtown Branch
               </Badge>
               <ThemeToggle />
@@ -44,7 +48,7 @@ function DashboardContent() {
         </header>
 
         {/* Main Content */}
-        <main className="px-6 py-8">
+        <main className="px-4 lg:px-6 py-6 lg:py-8">
           <div className="space-y-8">
             {/* Stats Grid */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

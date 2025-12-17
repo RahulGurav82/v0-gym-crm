@@ -391,10 +391,12 @@ function PackagesPageInner() {
                             <Eye className="h-4 w-4 mr-2" />
                             View Details
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit Package
-                          </DropdownMenuItem>
+                          <Link href={`/admin/packages/${pkg.id}/edit`}>
+                            <DropdownMenuItem>
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit Package
+                            </DropdownMenuItem>
+                          </Link>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-destructive">
                             <Trash2 className="h-4 w-4 mr-2" />

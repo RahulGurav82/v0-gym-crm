@@ -9,32 +9,47 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Building2, User, Phone, KeyRound, ArrowRight, ArrowLeft } from "lucide-react"
+import { Building2, Phone, KeyRound, ArrowRight, ArrowLeft } from "lucide-react"
+
+const ROLE_PHONE_MAP: Record<string, string> = {
+  "9137408709": "admin",
+  "9137408708": "head",
+  "9137408707": "manager",
+  "9137408706": "employee",
+}
 
 export function LoginForm() {
   const [selectedBranch, setSelectedBranch] = useState("")
-  const [selectedRole, setSelectedRole] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [otp, setOtp] = useState("")
   const [otpSent, setOtpSent] = useState(false)
 
+  const getRoleFromPhone = (phone: string): string => {
+    return ROLE_PHONE_MAP[phone] || ""
+  }
+
   const handleSendOtp = (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate sending OTP
+    const role = getRoleFromPhone(phoneNumber)
+    if (!role) {
+      alert("Invalid phone number. Please use a registered number.")
+      return
+    }
     setOtpSent(true)
-    console.log("[v0] OTP sent to:", phoneNumber, "Role:", selectedRole, "Branch:", selectedBranch)
+    console.log("[v0] OTP sent to:", phoneNumber, "Role:", role, "Branch:", selectedBranch)
   }
 
   const handleVerifyOtp = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("[v0] Verifying OTP:", otp, "for role:", selectedRole)
-    if (selectedRole === "admin") {
+    const role = getRoleFromPhone(phoneNumber)
+    console.log("[v0] Verifying OTP:", otp, "for role:", role)
+    if (role === "admin") {
       window.location.href = "/admin"
-    } else if (selectedRole === "head") {
+    } else if (role === "head") {
       window.location.href = "/head"
-    } else if (selectedRole === "manager") {
+    } else if (role === "manager") {
       window.location.href = "/manager"
-    } else if (selectedRole === "employee") {
+    } else if (role === "employee") {
       window.location.href = "/employee"
     }
   }
@@ -52,26 +67,6 @@ export function LoginForm() {
       <CardContent>
         {!otpSent ? (
           <form onSubmit={handleSendOtp} className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="role" className="text-sm font-medium">
-                Select Role
-              </Label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Select value={selectedRole} onValueChange={setSelectedRole} required>
-                  <SelectTrigger id="role" className="pl-10 h-12">
-                    <SelectValue placeholder="Choose your role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="head">Head</SelectItem>
-                    <SelectItem value="manager">Manager</SelectItem>
-                    <SelectItem value="employee">Employee</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
             <div className="space-y-2">
               <Label htmlFor="branch" className="text-sm font-medium">
                 Select Branch
@@ -102,10 +97,11 @@ export function LoginForm() {
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="Enter your 10-digit mobile number"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="pl-10 h-12"
+                  maxLength={10}
                   required
                 />
               </div>
@@ -114,7 +110,7 @@ export function LoginForm() {
             <Button
               type="submit"
               className="w-full h-12 text-base font-semibold group"
-              disabled={!selectedBranch || !selectedRole || !phoneNumber}
+              disabled={!selectedBranch || !phoneNumber || phoneNumber.length !== 10}
             >
               Send OTP
               <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
