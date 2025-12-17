@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Sidebar } from "@/components/sidebar"
-import { SidebarProvider } from "@/components/ui/sidebar"
+import { Sidebar, SidebarProvider, useSidebar } from "@/components/sidebar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -107,6 +106,7 @@ const mockOTRequests: OTRequest[] = [
 ]
 
 function HeadOTApprovalsInner() {
+  const { collapsed } = useSidebar()
   const [requests, setRequests] = useState<OTRequest[]>(mockOTRequests)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedDepartment, setSelectedDepartment] = useState("all")
@@ -197,8 +197,8 @@ function HeadOTApprovalsInner() {
 
   return (
     <div className="flex h-screen w-full">
-      <Sidebar role="head" />
-      <main className="flex-1 overflow-y-auto bg-background">
+      <Sidebar role="head" collapsed={collapsed} />
+      <main className={`flex-1 overflow-y-auto bg-background ${collapsed ? "ml-0" : "ml-64"}`}>
         <div className="container mx-auto p-6 space-y-6">
           {/* Header */}
           <div>
