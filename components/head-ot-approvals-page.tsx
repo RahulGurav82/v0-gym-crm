@@ -8,30 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import {
-  Clock,
-  Search,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  DollarSign,
-  Calendar,
-  User,
-  Building2,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react"
+import { Clock, Search, CheckCircle, XCircle, AlertCircle, DollarSign, ChevronLeft, ChevronRight } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface OTRequest {
@@ -218,368 +196,257 @@ function HeadOTApprovalsInner() {
   }
 
   return (
-    <SidebarProvider>
-      <div className="flex h-screen w-full">
-        <Sidebar role="head" />
-        <main className="flex-1 overflow-y-auto bg-background">
-          <div className="container mx-auto p-6 space-y-6">
-            {/* Header */}
-            <div>
-              <h1 className="text-3xl font-bold">OT Approvals</h1>
-              <p className="text-muted-foreground">Review and approve overtime requests sent by managers</p>
-            </div>
+    <div className="flex h-screen w-full">
+      <Sidebar role="head" />
+      <main className="flex-1 overflow-y-auto bg-background">
+        <div className="container mx-auto p-6 space-y-6">
+          {/* Header */}
+          <div>
+            <h1 className="text-3xl font-bold">OT Approvals</h1>
+            <p className="text-muted-foreground">Review and approve overtime requests sent by managers</p>
+          </div>
 
-            {/* Stats Cards */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
-                  <AlertCircle className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stats.total}</div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Pending</CardTitle>
-                  <Clock className="h-4 w-4 text-yellow-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stats.pending}</div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Approved</CardTitle>
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stats.approved}</div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Rejected</CardTitle>
-                  <XCircle className="h-4 w-4 text-red-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stats.rejected}</div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Total Hours</CardTitle>
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stats.totalHours.toFixed(1)}</div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Total Amount</CardTitle>
-                  <DollarSign className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">₹{stats.totalAmount}</div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Filters */}
+          {/* Stats Cards */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
             <Card>
-              <CardHeader>
-                <CardTitle>Filters</CardTitle>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+                <AlertCircle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search by employee name or OT ID..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-
-                  <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
-                    <SelectTrigger className="w-full md:w-[200px]">
-                      <SelectValue placeholder="Department" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Departments</SelectItem>
-                      <SelectItem value="Fitness">Fitness</SelectItem>
-                      <SelectItem value="Yoga">Yoga</SelectItem>
-                      <SelectItem value="Front Desk">Front Desk</SelectItem>
-                      <SelectItem value="Operations">Operations</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <Select value={selectedBranch} onValueChange={setSelectedBranch}>
-                    <SelectTrigger className="w-full md:w-[200px]">
-                      <SelectValue placeholder="Branch" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Branches</SelectItem>
-                      <SelectItem value="Ghansoli">Ghansoli</SelectItem>
-                      <SelectItem value="Nerul">Nerul</SelectItem>
-                      <SelectItem value="Ulwe">Ulwe</SelectItem>
-                      <SelectItem value="Sanpada">Sanpada</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.total}</div>
               </CardContent>
             </Card>
 
-            {/* Requests Table */}
             <Card>
-              <CardHeader>
-                <CardTitle>OT Requests</CardTitle>
-                <CardDescription>
-                  Showing {paginatedRequests.length} of {filteredRequests.length} requests
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Pending</CardTitle>
+                <Clock className="h-4 w-4 text-yellow-500" />
               </CardHeader>
               <CardContent>
-                <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="mb-4">
-                    <TabsTrigger value="pending">Pending ({stats.pending})</TabsTrigger>
-                    <TabsTrigger value="all">All ({stats.total})</TabsTrigger>
-                    <TabsTrigger value="approved">Approved ({stats.approved})</TabsTrigger>
-                    <TabsTrigger value="rejected">Rejected ({stats.rejected})</TabsTrigger>
-                  </TabsList>
+                <div className="text-2xl font-bold">{stats.pending}</div>
+              </CardContent>
+            </Card>
 
-                  <TabsContent value={activeTab}>
-                    <div className="rounded-md border">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>OT ID</TableHead>
-                            <TableHead>Employee</TableHead>
-                            <TableHead>Department</TableHead>
-                            <TableHead>Branch</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Hours</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead>Manager</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Actions</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {paginatedRequests.length === 0 ? (
-                            <TableRow>
-                              <TableCell colSpan={10} className="text-center py-8">
-                                No OT requests found
-                              </TableCell>
-                            </TableRow>
-                          ) : (
-                            paginatedRequests.map((request) => (
-                              <TableRow key={request.id}>
-                                <TableCell className="font-medium">{request.id}</TableCell>
-                                <TableCell>
-                                  <div>
-                                    <div className="font-medium">{request.employeeName}</div>
-                                    <div className="text-sm text-muted-foreground">{request.employeeRole}</div>
-                                  </div>
-                                </TableCell>
-                                <TableCell>{request.employeeDepartment}</TableCell>
-                                <TableCell>{request.branch}</TableCell>
-                                <TableCell>{request.date.toLocaleDateString("en-IN")}</TableCell>
-                                <TableCell>{request.hours} hrs</TableCell>
-                                <TableCell>₹{request.amount}</TableCell>
-                                <TableCell>
-                                  <div>
-                                    <div className="font-medium">{request.managerName}</div>
-                                    <div className="text-sm text-muted-foreground">
-                                      {request.managerApprovedOn.toLocaleDateString("en-IN")}
-                                    </div>
-                                  </div>
-                                </TableCell>
-                                <TableCell>{getStatusBadge(request.status)}</TableCell>
-                                <TableCell>
-                                  {request.status === "sent_to_head" ? (
-                                    <div className="flex gap-2">
-                                      <Button size="sm" onClick={() => handleAction(request, "approve")}>
-                                        Approve
-                                      </Button>
-                                      <Button
-                                        size="sm"
-                                        variant="destructive"
-                                        onClick={() => handleAction(request, "reject")}
-                                      >
-                                        Reject
-                                      </Button>
-                                    </div>
-                                  ) : (
-                                    <span className="text-sm text-muted-foreground">Processed</span>
-                                  )}
-                                </TableCell>
-                              </TableRow>
-                            ))
-                          )}
-                        </TableBody>
-                      </Table>
-                    </div>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Approved</CardTitle>
+                <CheckCircle className="h-4 w-4 text-green-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.approved}</div>
+              </CardContent>
+            </Card>
 
-                    {/* Pagination */}
-                    {totalPages > 1 && (
-                      <div className="flex items-center justify-between mt-4">
-                        <div className="text-sm text-muted-foreground">
-                          Page {currentPage} of {totalPages}
-                        </div>
-                        <div className="flex gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                            disabled={currentPage === 1}
-                          >
-                            <ChevronLeft className="h-4 w-4" />
-                            Previous
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                            disabled={currentPage === totalPages}
-                          >
-                            Next
-                            <ChevronRight className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </TabsContent>
-                </Tabs>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Rejected</CardTitle>
+                <XCircle className="h-4 w-4 text-red-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.rejected}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Hours</CardTitle>
+                <Clock className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.totalHours.toFixed(1)}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Amount</CardTitle>
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">₹{stats.totalAmount}</div>
               </CardContent>
             </Card>
           </div>
-        </main>
-      </div>
 
-      {/* Action Dialog */}
-      <Dialog open={showActionDialog} onOpenChange={setShowActionDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>{actionType === "approve" ? "Approve" : "Reject"} OT Request</DialogTitle>
-            <DialogDescription>
-              {actionType === "approve"
-                ? "Approve this overtime request for final processing"
-                : "Provide a reason for rejecting this OT request"}
-            </DialogDescription>
-          </DialogHeader>
-
-          {selectedRequest && (
-            <div className="space-y-4">
-              {/* Request Details */}
-              <div className="grid grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">Employee</div>
-                    <div className="font-medium">{selectedRequest.employeeName}</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">Department</div>
-                    <div className="font-medium">{selectedRequest.employeeDepartment}</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">Date</div>
-                    <div className="font-medium">{selectedRequest.date.toLocaleDateString("en-IN")}</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <div className="text-sm text-muted-foreground">Hours</div>
-                    <div className="font-medium">{selectedRequest.hours} hrs</div>
-                  </div>
-                </div>
-
-                <div className="col-span-2">
-                  <div className="text-sm text-muted-foreground">Amount</div>
-                  <div className="font-medium text-lg">₹{selectedRequest.amount}</div>
-                </div>
-              </div>
-
-              {/* Employee Reason */}
-              <div>
-                <Label>Employee Reason</Label>
-                <p className="text-sm text-muted-foreground mt-1">{selectedRequest.reason}</p>
-              </div>
-
-              {/* Manager Notes */}
-              {selectedRequest.managerNotes && (
-                <div>
-                  <Label>Manager Notes</Label>
-                  <p className="text-sm text-muted-foreground mt-1">{selectedRequest.managerNotes}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Approved by {selectedRequest.managerName} on{" "}
-                    {selectedRequest.managerApprovedOn.toLocaleDateString("en-IN")}
-                  </p>
-                </div>
-              )}
-
-              {/* Head Notes or Rejection Reason */}
-              {actionType === "approve" ? (
-                <div className="space-y-2">
-                  <Label htmlFor="headNotes">Notes (Optional)</Label>
-                  <Textarea
-                    id="headNotes"
-                    placeholder="Add any notes for this approval..."
-                    value={headNotes}
-                    onChange={(e) => setHeadNotes(e.target.value)}
-                    rows={3}
+          {/* Filters */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Filters</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by employee name or OT ID..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
                   />
                 </div>
-              ) : (
-                <div className="space-y-2">
-                  <Label htmlFor="rejectionReason">
-                    Rejection Reason <span className="text-red-500">*</span>
-                  </Label>
-                  <Textarea
-                    id="rejectionReason"
-                    placeholder="Please provide a reason for rejection..."
-                    value={rejectionReason}
-                    onChange={(e) => setRejectionReason(e.target.value)}
-                    rows={3}
-                    required
-                  />
-                </div>
-              )}
-            </div>
-          )}
 
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowActionDialog(false)}>
-              Cancel
-            </Button>
-            <Button onClick={confirmAction} variant={actionType === "approve" ? "default" : "destructive"}>
-              {actionType === "approve" ? "Approve Request" : "Reject Request"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </SidebarProvider>
+                <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+                  <SelectTrigger className="w-full md:w-[200px]">
+                    <SelectValue placeholder="Department" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Departments</SelectItem>
+                    <SelectItem value="Fitness">Fitness</SelectItem>
+                    <SelectItem value="Yoga">Yoga</SelectItem>
+                    <SelectItem value="Front Desk">Front Desk</SelectItem>
+                    <SelectItem value="Operations">Operations</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+                  <SelectTrigger className="w-full md:w-[200px]">
+                    <SelectValue placeholder="Branch" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Branches</SelectItem>
+                    <SelectItem value="Ghansoli">Ghansoli</SelectItem>
+                    <SelectItem value="Nerul">Nerul</SelectItem>
+                    <SelectItem value="Ulwe">Ulwe</SelectItem>
+                    <SelectItem value="Sanpada">Sanpada</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Requests Table */}
+          <Card>
+            <CardHeader>
+              <CardTitle>OT Requests</CardTitle>
+              <CardDescription>
+                Showing {paginatedRequests.length} of {filteredRequests.length} requests
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="mb-4">
+                  <TabsTrigger value="pending">Pending ({stats.pending})</TabsTrigger>
+                  <TabsTrigger value="all">All ({stats.total})</TabsTrigger>
+                  <TabsTrigger value="approved">Approved ({stats.approved})</TabsTrigger>
+                  <TabsTrigger value="rejected">Rejected ({stats.rejected})</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value={activeTab}>
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>OT ID</TableHead>
+                          <TableHead>Employee</TableHead>
+                          <TableHead>Department</TableHead>
+                          <TableHead>Branch</TableHead>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Hours</TableHead>
+                          <TableHead>Amount</TableHead>
+                          <TableHead>Manager</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {paginatedRequests.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={10} className="text-center py-8">
+                              No OT requests found
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          paginatedRequests.map((request) => (
+                            <TableRow key={request.id}>
+                              <TableCell className="font-medium">{request.id}</TableCell>
+                              <TableCell>
+                                <div>
+                                  <div className="font-medium">{request.employeeName}</div>
+                                  <div className="text-sm text-muted-foreground">{request.employeeRole}</div>
+                                </div>
+                              </TableCell>
+                              <TableCell>{request.employeeDepartment}</TableCell>
+                              <TableCell>{request.branch}</TableCell>
+                              <TableCell>{request.date.toLocaleDateString("en-IN")}</TableCell>
+                              <TableCell>{request.hours} hrs</TableCell>
+                              <TableCell>₹{request.amount}</TableCell>
+                              <TableCell>
+                                <div>
+                                  <div className="font-medium">{request.managerName}</div>
+                                  <div className="text-sm text-muted-foreground">
+                                    {request.managerApprovedOn.toLocaleDateString("en-IN")}
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell>{getStatusBadge(request.status)}</TableCell>
+                              <TableCell>
+                                {request.status === "sent_to_head" ? (
+                                  <div className="flex gap-2">
+                                    <Button size="sm" onClick={() => handleAction(request, "approve")}>
+                                      Approve
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="destructive"
+                                      onClick={() => handleAction(request, "reject")}
+                                    >
+                                      Reject
+                                    </Button>
+                                  </div>
+                                ) : (
+                                  <span className="text-sm text-muted-foreground">Processed</span>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center justify-between mt-4">
+                      <div className="text-sm text-muted-foreground">
+                        Page {currentPage} of {totalPages}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                          disabled={currentPage === 1}
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                          Previous
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                          disabled={currentPage === totalPages}
+                        >
+                          Next
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    </div>
   )
 }
 
 export default function HeadOTApprovals() {
-  return <HeadOTApprovalsInner />
+  return (
+    <SidebarProvider>
+      <HeadOTApprovalsInner />
+    </SidebarProvider>
+  )
 }
