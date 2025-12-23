@@ -42,6 +42,7 @@ import {
   Clock,
   Menu,
   X,
+  Target,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -120,6 +121,12 @@ const crmNavItems: NavItem[] = [
     title: "Mark Attendance",
     href: "/manager/mark-attendance",
     icon: UserCheck,
+    roles: ["manager"],
+  },
+  {
+    title: "Training",
+    href: "/manager/training",
+    icon: Dumbbell,
     roles: ["manager"],
   },
   {
@@ -216,6 +223,24 @@ const crmNavItems: NavItem[] = [
     title: "My PT",
     href: "/employee/my-pt",
     icon: Dumbbell,
+    roles: ["employee"],
+  },
+  {
+    title: "My Follow-Ups",
+    href: "/employee/follow-ups",
+    icon: Target,
+    roles: ["employee"],
+  },
+  {
+    title: "Orders",
+    href: "/employee/orders",
+    icon: ShoppingCart,
+    roles: ["employee"],
+  },
+  {
+    title: "My Purchases",
+    href: "/employee/purchases",
+    icon: ShoppingBag,
     roles: ["employee"],
   },
 ]
