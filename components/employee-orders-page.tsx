@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Search, Package, IndianRupee, ShoppingCart, User, Phone, MapPin, ChevronRight } from "lucide-react"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Search, Package, IndianRupee, ShoppingCart, Eye } from "lucide-react"
 import Link from "next/link"
 import { BRANCHES } from "@/lib/branches"
 
@@ -204,81 +205,95 @@ function EmployeeOrdersPageInner() {
             </CardContent>
           </Card>
 
-          {/* Orders List */}
-          <div className="space-y-4">
-            {paginatedOrders.map((order) => (
-              <Card key={order.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-4 flex-1">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-semibold">{order.orderNo}</h3>
-                            <Badge className={getStatusColor(order.status)}>{order.status.toUpperCase()}</Badge>
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            {order.createdAt.toLocaleDateString("en-IN", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </p>
-                        </div>
-                        <Link href={`/employee/orders/${order.id}`}>
-                          <Button variant="outline" size="sm">
-                            View Details
-                            <ChevronRight className="h-4 w-4 ml-1" />
-                          </Button>
-                        </Link>
-                      </div>
-
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="flex items-center gap-2">
-                          <User className="h-4 w-4 text-muted-foreground" />
+          {/* Orders Table */}
+          <Card>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Order ID</TableHead>
+                      <TableHead>Member Details</TableHead>
+                      <TableHead>Package/Products</TableHead>
+                      <TableHead className="text-right">Total Amount</TableHead>
+                      <TableHead className="text-right">Paid Amount</TableHead>
+                      <TableHead className="text-right">Balance</TableHead>
+                      <TableHead>Due Date</TableHead>
+                      <TableHead>Payment Methods</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-center">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {paginatedOrders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell className="font-medium">{order.orderNo}</TableCell>
+                        <TableCell>
                           <div>
-                            <p className="text-sm font-medium">{order.memberName}</p>
-                            <p className="text-xs text-muted-foreground flex items-center gap-1">
-                              <Phone className="h-3 w-3" />
-                              {order.memberPhone}
-                            </p>
+                            <p className="font-medium">{order.memberName}</p>
+                            <p className="text-xs text-muted-foreground">{order.memberPhone}</p>
                           </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <Package className="h-4 w-4 text-muted-foreground" />
+                        </TableCell>
+                        <TableCell>
                           <div>
-                            <p className="text-sm font-medium">{order.packageName || "Individual Products"}</p>
+                            <p className="font-medium">{order.packageName || "Individual Products"}</p>
                             <p className="text-xs text-muted-foreground">
                               {order.productsCount} product{order.productsCount > 1 ? "s" : ""}
                             </p>
                           </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <IndianRupee className="h-4 w-4 text-muted-foreground" />
-                          <div>
-                            <p className="text-sm font-medium">₹{order.totalAmount}</p>
-                            <p className="text-xs text-muted-foreground">Paid: ₹{order.paidAmount}</p>
+                        </TableCell>
+                        <TableCell className="text-right font-medium">₹{order.totalAmount}</TableCell>
+                        <TableCell className="text-right text-green-600">₹{order.paidAmount}</TableCell>
+                        <TableCell className="text-right">
+                          {Number.parseFloat(order.pendingAmount) > 0 ? (
+                            <span className="text-red-600 font-medium">₹{order.pendingAmount}</span>
+                          ) : (
+                            <span className="text-muted-foreground">₹0.00</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {Number.parseFloat(order.pendingAmount) > 0 ? (
+                            <span className="text-sm">
+                              {new Date(order.createdAt.getTime() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(
+                                "en-IN",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )}
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground text-sm">-</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1">
+                            <Badge variant="outline" className="text-xs">
+                              Cash
+                            </Badge>
+                            <Badge variant="outline" className="text-xs">
+                              Card
+                            </Badge>
                           </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-muted-foreground" />
-                          <div>
-                            <p className="text-sm font-medium">{order.branchName}</p>
-                            {Number.parseFloat(order.pendingAmount) > 0 && (
-                              <p className="text-xs text-red-600">Due: ₹{order.pendingAmount}</p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge className={getStatusColor(order.status)}>{order.status.toUpperCase()}</Badge>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Link href={`/employee/orders/${order.id}`}>
+                            <Button variant="ghost" size="sm">
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Pagination */}
           {totalPages > 1 && (
