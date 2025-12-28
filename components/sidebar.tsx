@@ -130,6 +130,18 @@ const crmNavItems: NavItem[] = [
     roles: ["manager"],
   },
   {
+    title: "Memberships",
+    href: "/manager/memberships",
+    icon: Users,
+    roles: ["manager"],
+  },
+  {
+    title: "Amenities",
+    href: "/manager/amenities",
+    icon: Dumbbell,
+    roles: ["manager"],
+  },
+  {
     title: "Attendance Approvals",
     href: "/head/attendance-approvals",
     icon: UserCheck,
