@@ -463,78 +463,235 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
 
             {/* Membership Tab */}
             <TabsContent value="membership" className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
+              {/* Package Summary Card */}
+              <Card className="border-primary/20">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
                     <CardTitle className="text-lg flex items-center gap-2">
                       <CreditCard className="w-5 h-5 text-primary" />
-                      Current Plan
+                      Current Package
                     </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-xl font-bold">{member.membershipDetails.plan}</h3>
-                        {getMembershipBadge(member.membership)}
+                    <Badge className="bg-green-500/10 text-green-600 border-green-500/20">Paid</Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                      <div>
+                        <h3 className="text-xl font-bold">Standard Package Yearly (Ulwe)</h3>
+                        <p className="text-sm text-muted-foreground">Invoice: TFC-EXL-3382</p>
                       </div>
-                      <p className="text-3xl font-bold text-primary">{member.membershipDetails.amount}</p>
-                      <p className="text-sm text-muted-foreground">per year</p>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Start Date</span>
-                        <span className="font-medium">{member.joinDate}</span>
-                      </div>
-                      <Separator />
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Expiry Date</span>
-                        <span className="font-medium">{member.expiryDate}</span>
-                      </div>
-                      <Separator />
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Payment Method</span>
-                        <span className="font-medium">{member.membershipDetails.paymentMethod}</span>
-                      </div>
-                      <Separator />
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Auto Renewal</span>
-                        <Badge variant={member.membershipDetails.autoRenew ? "default" : "outline"}>
-                          {member.membershipDetails.autoRenew ? "Enabled" : "Disabled"}
-                        </Badge>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-primary">₹10,500</p>
+                        <p className="text-xs text-muted-foreground">Incl. ₹500 tax</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                    <div className="flex flex-wrap gap-4 text-sm">
+                      <div className="flex items-center gap-1.5">
+                        <Building className="w-4 h-4 text-muted-foreground" />
+                        <span>Ulwe (TFC-UL-01)</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="w-4 h-4 text-muted-foreground" />
+                        <span>Oct 13, 2025 - Oct 12, 2026</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <User className="w-4 h-4 text-muted-foreground" />
+                        <span>Created by: vishal mangal</span>
+                      </div>
+                    </div>
+                  </div>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <History className="w-5 h-5 text-primary" />
-                      Payment History
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {[
-                        { date: "2024-01-15", amount: "₹24,999", status: "Paid", method: "Credit Card" },
-                        { date: "2023-01-15", amount: "₹19,999", status: "Paid", method: "UPI" },
-                        { date: "2022-01-15", amount: "₹14,999", status: "Paid", method: "Debit Card" },
-                      ].map((payment, i) => (
-                        <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                          <div>
-                            <p className="font-medium">{payment.amount}</p>
-                            <p className="text-sm text-muted-foreground">{payment.date}</p>
+                  {/* Products in Package */}
+                  <div>
+                    <h4 className="font-semibold mb-3 flex items-center gap-2">
+                      <Activity className="w-4 h-4 text-primary" />
+                      Products Included
+                    </h4>
+                    <div className="space-y-3">
+                      {/* Gym Membership Product */}
+                      <div className="p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 rounded-lg bg-primary/10">
+                              <Activity className="w-5 h-5 text-primary" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h5 className="font-semibold">Gym Membership</h5>
+                                <Badge className="bg-green-500/10 text-green-600 text-xs">Active</Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground">12 Months Duration</p>
+                              <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
+                                <span>Start: Oct 13, 2025</span>
+                                <span>End: Oct 12, 2026</span>
+                              </div>
+                            </div>
                           </div>
                           <div className="text-right">
-                            <Badge className="bg-green-500/10 text-green-600">{payment.status}</Badge>
-                            <p className="text-sm text-muted-foreground mt-1">{payment.method}</p>
+                            <p className="font-bold">₹10,500</p>
+                            <p className="text-xs text-muted-foreground">₹10,000 + ₹500 tax</p>
                           </div>
                         </div>
-                      ))}
+                        <div className="mt-3 pt-3 border-t">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Days Remaining</span>
+                            <div className="flex items-center gap-2">
+                              <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-green-500 rounded-full" style={{ width: "85%" }} />
+                              </div>
+                              <span className="font-medium text-green-600">287 days</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Steam Room Amenity */}
+                      <div className="p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 rounded-lg bg-blue-500/10">
+                              <Activity className="w-5 h-5 text-blue-600" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h5 className="font-semibold">Steam Room</h5>
+                                <Badge className="bg-green-500/10 text-green-600 text-xs">Active</Badge>
+                                <Badge variant="outline" className="text-xs">Amenity</Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground">12 Months Duration</p>
+                              <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
+                                <span>Start: Oct 13, 2025</span>
+                                <span>End: Oct 12, 2026</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-muted-foreground">Included</p>
+                            <p className="text-xs text-muted-foreground">In package</p>
+                          </div>
+                        </div>
+                        <div className="mt-3 pt-3 border-t">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Days Remaining</span>
+                            <div className="flex items-center gap-2">
+                              <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-green-500 rounded-full" style={{ width: "85%" }} />
+                              </div>
+                              <span className="font-medium text-green-600">287 days</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Payment Details Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <History className="w-5 h-5 text-primary" />
+                    Payment Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Payment Summary */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-lg bg-muted/50">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Subtotal</p>
+                      <p className="text-lg font-bold">₹10,000</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Tax (GST)</p>
+                      <p className="text-lg font-bold">₹500</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Amount</p>
+                      <p className="text-lg font-bold text-primary">₹10,500</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Pending</p>
+                      <p className="text-lg font-bold text-green-600">₹0</p>
+                    </div>
+                  </div>
+
+                  {/* Individual Payments */}
+                  <div>
+                    <h4 className="font-semibold mb-3">Payment Records</h4>
+                    <div className="space-y-3">
+                      <div className="p-4 rounded-lg border bg-card">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 rounded-lg bg-green-500/10">
+                              <CheckCircle2 className="w-5 h-5 text-green-600" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h5 className="font-semibold">₹10,500</h5>
+                                <Badge className="bg-green-500/10 text-green-600 text-xs">Paid</Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground">UPI Payment</p>
+                              <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
+                                <span>Sep 30, 2025 at 5:30 AM</span>
+                                <span>Invoice: TFC-EXL-3382</span>
+                              </div>
+                              <p className="text-xs text-muted-foreground mt-1">Collected by: vishal mangal (TFC-EMP-0)</p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm" className="gap-2 bg-transparent">
+                            <Download className="w-4 h-4" />
+                            Download Invoice
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Access Info */}
+                  <div className="p-4 rounded-lg bg-muted/30 border">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Building className="w-4 h-4 text-primary" />
+                      <span className="font-semibold">Branch Access</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline">Single Branch Access</Badge>
+                      <span className="text-sm text-muted-foreground">Ulwe (TFC-UL-01)</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <RefreshCw className="w-5 h-5 text-primary" />
+                    Quick Actions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-3">
+                    <Button className="gap-2 bg-primary hover:bg-primary/90">
+                      <RefreshCw className="w-4 h-4" />
+                      Renew Membership
+                    </Button>
+                    <Button variant="outline" className="gap-2 bg-transparent">
+                      <Play className="w-4 h-4" />
+                      Add Amenity
+                    </Button>
+                    <Button variant="outline" className="gap-2 bg-transparent">
+                      <Pause className="w-4 h-4" />
+                      Freeze Membership
+                    </Button>
+                    <Button variant="outline" className="gap-2 bg-transparent">
+                      <Download className="w-4 h-4" />
+                      Download All Invoices
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             {/* Biometric Tab */}
