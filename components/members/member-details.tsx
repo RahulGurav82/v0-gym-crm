@@ -540,575 +540,522 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
               </div>
 
               {/* Membership Filter Tabs */}
-              <Tabs defaultValue="active" className="w-full">
+              <Tabs defaultValue="all" className="w-full">
                 <TabsList className="bg-muted/50 mb-4">
-                  <TabsTrigger value="all">All Orders</TabsTrigger>
-                  <TabsTrigger value="active">Active</TabsTrigger>
-                  <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-                  <TabsTrigger value="past">Past</TabsTrigger>
+                  <TabsTrigger value="all">All Orders (6)</TabsTrigger>
+                  <TabsTrigger value="active">Active (2)</TabsTrigger>
+                  <TabsTrigger value="upcoming">Upcoming (1)</TabsTrigger>
+                  <TabsTrigger value="past">Past (3)</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="all" className="space-y-4">
-                  {/* Membership Order Card Component */}
-                  <div className="p-4 cursor-pointer hover:bg-muted/30 transition-colors">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-green-500/10">
-                          <CreditCard className="w-5 h-5 text-green-600" />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-mono text-sm text-muted-foreground">ORD-2025-001</span>
-                            <Badge className="bg-green-500/10 text-green-600 border-green-500/20">Active</Badge>
-                          </div>
-                          <h4 className="font-semibold mt-1">Standard Package Yearly (Ulwe)</h4>
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                              <Building className="w-3 h-3" />
-                              Ulwe (TFC-UL-01)
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
-                              Oct 13, 2025 - Oct 12, 2026
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <p className="text-lg font-bold">₹10,500</p>
-                          <p className="text-xs text-muted-foreground">Fully Paid</p>
-                        </div>
-                        <div className="transform transition-transform rotate-180">
-                          <Activity className="w-5 h-5 text-muted-foreground" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Expanded Content */}
-                  <div className="border-t">
-                    {/* Products Section */}
-                    <div className="p-4 bg-muted/20">
-                      <h5 className="font-semibold mb-3 text-sm">Products (2)</h5>
-                      <div className="space-y-2">
-                        <div className="p-3 rounded-lg bg-background border">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <div className="p-1.5 rounded bg-muted">
-                                <Activity className="w-4 h-4 text-primary" />
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-sm">Gym Membership</span>
-                                  <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Active</Badge>
+                  <Card>
+                    <CardContent className="p-0">
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b bg-muted/50">
+                              <th className="text-left p-4 font-medium text-sm">Order ID</th>
+                              <th className="text-left p-4 font-medium text-sm">Package / Products</th>
+                              <th className="text-left p-4 font-medium text-sm">Total</th>
+                              <th className="text-left p-4 font-medium text-sm">Paid</th>
+                              <th className="text-left p-4 font-medium text-sm">Balance</th>
+                              <th className="text-left p-4 font-medium text-sm">Due Date</th>
+                              <th className="text-left p-4 font-medium text-sm">Payment</th>
+                              <th className="text-left p-4 font-medium text-sm">Status</th>
+                              <th className="text-left p-4 font-medium text-sm">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {/* Active Order 1 - Package with multiple products */}
+                            <tr className="border-b hover:bg-muted/30">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2025-001</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Standard Package Yearly</p>
+                                  <p className="text-xs text-muted-foreground">Gym Membership, Steam Room</p>
+                                  <p className="text-xs text-muted-foreground">Oct 13, 2025 - Oct 12, 2026</p>
                                 </div>
-                                <p className="text-xs text-muted-foreground">12 Months</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
-                              </div>
-                              <span className="text-xs text-green-600 font-medium">287d</span>
-                              <span className="font-medium text-sm">₹10,000</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-3 rounded-lg bg-background border">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <div className="p-1.5 rounded bg-muted">
-                                <Play className="w-4 h-4 text-blue-600" />
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-sm">Steam Room</span>
-                                  <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Active</Badge>
-                                  <Badge variant="outline" className="text-xs py-0">Included</Badge>
+                              </td>
+                              <td className="p-4 font-semibold">₹10,500</td>
+                              <td className="p-4 text-green-600 font-medium">₹10,500</td>
+                              <td className="p-4 text-green-600 font-medium">₹0</td>
+                              <td className="p-4 text-muted-foreground">-</td>
+                              <td className="p-4">
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge variant="outline" className="text-xs">UPI</Badge>
                                 </div>
-                                <p className="text-xs text-muted-foreground">12 Months</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
-                              </div>
-                              <span className="text-xs text-green-600 font-medium">287d</span>
-                              <span className="font-medium text-sm">Incl.</span>
-                            </div>
-                          </div>
-                        </div>
+                              </td>
+                              <td className="p-4">
+                                <Badge className="bg-green-500/10 text-green-600">Active</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
+                                  <Activity className="w-4 h-4" />
+                                  View
+                                </Button>
+                              </td>
+                            </tr>
+                            {/* Active Order 2 - Individual product */}
+                            <tr className="border-b hover:bg-muted/30">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2025-002</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Individual Product</p>
+                                  <p className="text-xs text-muted-foreground">Yoga Classes (24 slots)</p>
+                                  <p className="text-xs text-muted-foreground">Nov 1, 2025 - Jan 31, 2026</p>
+                                </div>
+                              </td>
+                              <td className="p-4 font-semibold">₹3,000</td>
+                              <td className="p-4 text-green-600 font-medium">₹3,000</td>
+                              <td className="p-4 text-green-600 font-medium">₹0</td>
+                              <td className="p-4 text-muted-foreground">-</td>
+                              <td className="p-4">
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge variant="outline" className="text-xs">Cash</Badge>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <Badge className="bg-green-500/10 text-green-600">Active</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
+                                  <Activity className="w-4 h-4" />
+                                  View
+                                </Button>
+                              </td>
+                            </tr>
+                            {/* Upcoming Order - Partial payment */}
+                            <tr className="border-b hover:bg-muted/30">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2025-003</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Premium Package Yearly</p>
+                                  <p className="text-xs text-muted-foreground">Gym, Steam, PT (12 sessions)</p>
+                                  <p className="text-xs text-muted-foreground">Oct 13, 2026 - Oct 12, 2027</p>
+                                </div>
+                              </td>
+                              <td className="p-4 font-semibold">₹25,000</td>
+                              <td className="p-4 text-green-600 font-medium">₹12,500</td>
+                              <td className="p-4 text-yellow-600 font-medium">₹12,500</td>
+                              <td className="p-4 text-yellow-600">Oct 1, 2026</td>
+                              <td className="p-4">
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge variant="outline" className="text-xs">Card</Badge>
+                                  <Badge variant="outline" className="text-xs bg-yellow-500/10 text-yellow-600 border-yellow-500/20">Pending</Badge>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <Badge className="bg-blue-500/10 text-blue-600">Upcoming</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
+                                  <Activity className="w-4 h-4" />
+                                  View
+                                </Button>
+                              </td>
+                            </tr>
+                            {/* Past Order 1 */}
+                            <tr className="border-b hover:bg-muted/30 opacity-70">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2024-045</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Basic Package Yearly</p>
+                                  <p className="text-xs text-muted-foreground">Gym Membership</p>
+                                  <p className="text-xs text-muted-foreground">Oct 13, 2024 - Oct 12, 2025</p>
+                                </div>
+                              </td>
+                              <td className="p-4 font-semibold">₹8,000</td>
+                              <td className="p-4 text-muted-foreground">₹8,000</td>
+                              <td className="p-4 text-muted-foreground">₹0</td>
+                              <td className="p-4 text-muted-foreground">-</td>
+                              <td className="p-4">
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge variant="outline" className="text-xs">UPI</Badge>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
+                                  <Activity className="w-4 h-4" />
+                                  View
+                                </Button>
+                              </td>
+                            </tr>
+                            {/* Past Order 2 */}
+                            <tr className="border-b hover:bg-muted/30 opacity-70">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2024-022</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Individual Product</p>
+                                  <p className="text-xs text-muted-foreground">Crossfit (12 slots)</p>
+                                  <p className="text-xs text-muted-foreground">Jun 1, 2024 - Aug 31, 2024</p>
+                                </div>
+                              </td>
+                              <td className="p-4 font-semibold">₹4,500</td>
+                              <td className="p-4 text-muted-foreground">₹4,500</td>
+                              <td className="p-4 text-muted-foreground">₹0</td>
+                              <td className="p-4 text-muted-foreground">-</td>
+                              <td className="p-4">
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge variant="outline" className="text-xs">Cash</Badge>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
+                                  <Activity className="w-4 h-4" />
+                                  View
+                                </Button>
+                              </td>
+                            </tr>
+                            {/* Past Order 3 */}
+                            <tr className="hover:bg-muted/30 opacity-70">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2023-089</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Standard Package 6 Months</p>
+                                  <p className="text-xs text-muted-foreground">Gym Membership, Sauna</p>
+                                  <p className="text-xs text-muted-foreground">Apr 1, 2024 - Sep 30, 2024</p>
+                                </div>
+                              </td>
+                              <td className="p-4 font-semibold">₹6,500</td>
+                              <td className="p-4 text-muted-foreground">₹6,500</td>
+                              <td className="p-4 text-muted-foreground">₹0</td>
+                              <td className="p-4 text-muted-foreground">-</td>
+                              <td className="p-4">
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge variant="outline" className="text-xs">UPI</Badge>
+                                  <Badge variant="outline" className="text-xs">Cash</Badge>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
+                                  <Activity className="w-4 h-4" />
+                                  View
+                                </Button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                    </div>
-
-                    {/* Payments Section */}
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <h5 className="font-semibold text-sm">Payments (1)</h5>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                          <div className="flex items-center gap-3">
-                            <div className="p-1.5 rounded bg-green-500/10">
-                              <CheckCircle2 className="w-4 h-4 text-green-600" />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-semibold text-sm">₹10,500</span>
-                                <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Paid</Badge>
-                              </div>
-                              <p className="text-xs text-muted-foreground">UPI • Sep 30, 2025 at 5:30 AM</p>
-                              <p className="text-xs text-muted-foreground">By: vishal mangal</p>
-                            </div>
-                          </div>
-                          <Button variant="outline" size="sm" className="gap-1.5 h-8 bg-transparent">
-                            <Download className="w-3.5 h-3.5" />
-                            Invoice
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Footer Actions */}
-                    <div className="p-4 border-t bg-muted/10 flex flex-wrap gap-2">
-                      <Button size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
-                        <RefreshCw className="w-3.5 h-3.5" />
-                        Renew
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
-                        <Pause className="w-3.5 h-3.5" />
-                        Freeze
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
-                        <Download className="w-3.5 h-3.5" />
-                        Download All
-                      </Button>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </TabsContent>
 
                 <TabsContent value="active" className="space-y-4">
-                  {/* Membership Order Card Component */}
-                  <div className="p-4 cursor-pointer hover:bg-muted/30 transition-colors">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-green-500/10">
-                          <CreditCard className="w-5 h-5 text-green-600" />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-mono text-sm text-muted-foreground">ORD-2025-001</span>
-                            <Badge className="bg-green-500/10 text-green-600 border-green-500/20">Active</Badge>
-                          </div>
-                          <h4 className="font-semibold mt-1">Standard Package Yearly (Ulwe)</h4>
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                              <Building className="w-3 h-3" />
-                              Ulwe (TFC-UL-01)
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
-                              Oct 13, 2025 - Oct 12, 2026
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <p className="text-lg font-bold">₹10,500</p>
-                          <p className="text-xs text-muted-foreground">Fully Paid</p>
-                        </div>
-                        <div className="transform transition-transform rotate-180">
-                          <Activity className="w-5 h-5 text-muted-foreground" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Expanded Content */}
-                  <div className="border-t">
-                    {/* Products Section */}
-                    <div className="p-4 bg-muted/20">
-                      <h5 className="font-semibold mb-3 text-sm">Products (2)</h5>
-                      <div className="space-y-2">
-                        <div className="p-3 rounded-lg bg-background border">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <div className="p-1.5 rounded bg-muted">
-                                <Activity className="w-4 h-4 text-primary" />
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-sm">Gym Membership</span>
-                                  <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Active</Badge>
+                  <Card>
+                    <CardContent className="p-0">
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b bg-muted/50">
+                              <th className="text-left p-4 font-medium text-sm">Order ID</th>
+                              <th className="text-left p-4 font-medium text-sm">Package / Products</th>
+                              <th className="text-left p-4 font-medium text-sm">Total</th>
+                              <th className="text-left p-4 font-medium text-sm">Paid</th>
+                              <th className="text-left p-4 font-medium text-sm">Balance</th>
+                              <th className="text-left p-4 font-medium text-sm">Days Left</th>
+                              <th className="text-left p-4 font-medium text-sm">Payment</th>
+                              <th className="text-left p-4 font-medium text-sm">Status</th>
+                              <th className="text-left p-4 font-medium text-sm">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="border-b hover:bg-muted/30">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2025-001</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Standard Package Yearly</p>
+                                  <p className="text-xs text-muted-foreground">Gym Membership, Steam Room</p>
+                                  <p className="text-xs text-muted-foreground">Oct 13, 2025 - Oct 12, 2026</p>
                                 </div>
-                                <p className="text-xs text-muted-foreground">12 Months</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
-                              </div>
-                              <span className="text-xs text-green-600 font-medium">287d</span>
-                              <span className="font-medium text-sm">₹10,000</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-3 rounded-lg bg-background border">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <div className="p-1.5 rounded bg-muted">
-                                <Play className="w-4 h-4 text-blue-600" />
-                              </div>
-                              <div>
+                              </td>
+                              <td className="p-4 font-semibold">₹10,500</td>
+                              <td className="p-4 text-green-600 font-medium">₹10,500</td>
+                              <td className="p-4 text-green-600 font-medium">₹0</td>
+                              <td className="p-4">
                                 <div className="flex items-center gap-2">
-                                  <span className="font-medium text-sm">Steam Room</span>
-                                  <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Active</Badge>
-                                  <Badge variant="outline" className="text-xs py-0">Included</Badge>
+                                  <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
+                                    <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
+                                  </div>
+                                  <span className="text-xs text-green-600 font-medium">287d</span>
                                 </div>
-                                <p className="text-xs text-muted-foreground">12 Months</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
-                              </div>
-                              <span className="text-xs text-green-600 font-medium">287d</span>
-                              <span className="font-medium text-sm">Incl.</span>
-                            </div>
-                          </div>
-                        </div>
+                              </td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-xs">UPI</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Badge className="bg-green-500/10 text-green-600">Active</Badge>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-1">
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <Activity className="w-4 h-4" />
+                                    View
+                                  </Button>
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <RefreshCw className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr className="hover:bg-muted/30">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2025-002</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Individual Product</p>
+                                  <p className="text-xs text-muted-foreground">Yoga Classes (8/24 slots used)</p>
+                                  <p className="text-xs text-muted-foreground">Nov 1, 2025 - Jan 31, 2026</p>
+                                </div>
+                              </td>
+                              <td className="p-4 font-semibold">₹3,000</td>
+                              <td className="p-4 text-green-600 font-medium">₹3,000</td>
+                              <td className="p-4 text-green-600 font-medium">₹0</td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
+                                    <div className="h-full bg-green-500 rounded-full" style={{ width: "33%" }} />
+                                  </div>
+                                  <span className="text-xs text-green-600 font-medium">102d</span>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-xs">Cash</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Badge className="bg-green-500/10 text-green-600">Active</Badge>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-1">
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <Activity className="w-4 h-4" />
+                                    View
+                                  </Button>
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <RefreshCw className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                    </div>
-
-                    {/* Payments Section */}
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <h5 className="font-semibold text-sm">Payments (1)</h5>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                          <div className="flex items-center gap-3">
-                            <div className="p-1.5 rounded bg-green-500/10">
-                              <CheckCircle2 className="w-4 h-4 text-green-600" />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-semibold text-sm">₹10,500</span>
-                                <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Paid</Badge>
-                              </div>
-                              <p className="text-xs text-muted-foreground">UPI • Sep 30, 2025 at 5:30 AM</p>
-                              <p className="text-xs text-muted-foreground">By: vishal mangal</p>
-                            </div>
-                          </div>
-                          <Button variant="outline" size="sm" className="gap-1.5 h-8 bg-transparent">
-                            <Download className="w-3.5 h-3.5" />
-                            Invoice
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Footer Actions */}
-                    <div className="p-4 border-t bg-muted/10 flex flex-wrap gap-2">
-                      <Button size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
-                        <RefreshCw className="w-3.5 h-3.5" />
-                        Renew
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
-                        <Pause className="w-3.5 h-3.5" />
-                        Freeze
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
-                        <Download className="w-3.5 h-3.5" />
-                        Download All
-                      </Button>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </TabsContent>
 
                 <TabsContent value="upcoming" className="space-y-4">
-                  {/* Membership Order Card Component */}
-                  <div className="p-4 cursor-pointer hover:bg-muted/30 transition-colors">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-blue-500/10">
-                          <CreditCard className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-mono text-sm text-muted-foreground">ORD-2025-003</span>
-                            <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/20">Upcoming</Badge>
-                            <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20">₹12,500 Due</Badge>
-                          </div>
-                          <h4 className="font-semibold mt-1">Premium Package Yearly</h4>
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                              <Building className="w-3 h-3" />
-                              Ulwe (TFC-UL-01)
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
-                              Oct 13, 2026 - Oct 12, 2027
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <p className="text-lg font-bold">₹25,000</p>
-                          <p className="text-xs text-muted-foreground">₹12,500 Paid</p>
-                        </div>
-                        <div className="transform transition-transform">
-                          <Activity className="w-5 h-5 text-muted-foreground" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Expanded Content */}
-                  <div className="border-t">
-                    {/* Products Section */}
-                    <div className="p-4 bg-muted/20">
-                      <h5 className="font-semibold mb-3 text-sm">Products (3)</h5>
-                      <div className="space-y-2">
-                        <div className="p-3 rounded-lg bg-background border">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <div className="p-1.5 rounded bg-muted">
-                                <Activity className="w-4 h-4 text-primary" />
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-sm">Gym Membership</span>
-                                  <Badge className="bg-blue-500/10 text-blue-600 text-xs py-0">Upcoming</Badge>
+                  <Card>
+                    <CardContent className="p-0">
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b bg-muted/50">
+                              <th className="text-left p-4 font-medium text-sm">Order ID</th>
+                              <th className="text-left p-4 font-medium text-sm">Package / Products</th>
+                              <th className="text-left p-4 font-medium text-sm">Total</th>
+                              <th className="text-left p-4 font-medium text-sm">Paid</th>
+                              <th className="text-left p-4 font-medium text-sm">Balance</th>
+                              <th className="text-left p-4 font-medium text-sm">Due Date</th>
+                              <th className="text-left p-4 font-medium text-sm">Payment</th>
+                              <th className="text-left p-4 font-medium text-sm">Status</th>
+                              <th className="text-left p-4 font-medium text-sm">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="hover:bg-muted/30">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2025-003</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Premium Package Yearly</p>
+                                  <p className="text-xs text-muted-foreground">Gym, Steam, PT (12 sessions)</p>
+                                  <p className="text-xs text-muted-foreground">Oct 13, 2026 - Oct 12, 2027</p>
                                 </div>
-                                <p className="text-xs text-muted-foreground">12 Months</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-blue-500 rounded-full" style={{ width: "0%" }} />
-                              </div>
-                              <span className="text-xs text-blue-600 font-medium">null</span>
-                              <span className="font-medium text-sm">₹20,000</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-3 rounded-lg bg-background border">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <div className="p-1.5 rounded bg-muted">
-                                <Play className="w-4 h-4 text-blue-600" />
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-sm">Steam Room</span>
-                                  <Badge className="bg-blue-500/10 text-blue-600 text-xs py-0">Upcoming</Badge>
-                                  <Badge variant="outline" className="text-xs py-0">Included</Badge>
+                              </td>
+                              <td className="p-4 font-semibold">₹25,000</td>
+                              <td className="p-4 text-green-600 font-medium">₹12,500</td>
+                              <td className="p-4 text-yellow-600 font-medium">₹12,500</td>
+                              <td className="p-4 text-yellow-600">Oct 1, 2026</td>
+                              <td className="p-4">
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge variant="outline" className="text-xs">Card</Badge>
+                                  <Badge variant="outline" className="text-xs bg-yellow-500/10 text-yellow-600 border-yellow-500/20">Pending</Badge>
                                 </div>
-                                <p className="text-xs text-muted-foreground">12 Months</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-blue-500 rounded-full" style={{ width: "0%" }} />
-                              </div>
-                              <span className="text-xs text-blue-600 font-medium">null</span>
-                              <span className="font-medium text-sm">Incl.</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-3 rounded-lg bg-background border">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <div className="p-1.5 rounded bg-muted">
-                                <Users className="w-4 h-4 text-purple-600" />
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-sm">Personal Training</span>
-                                  <Badge className="bg-blue-500/10 text-blue-600 text-xs py-0">Upcoming</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Badge className="bg-blue-500/10 text-blue-600">Upcoming</Badge>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-1">
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <Activity className="w-4 h-4" />
+                                    View
+                                  </Button>
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <CreditCard className="w-4 h-4" />
+                                  </Button>
                                 </div>
-                                <p className="text-xs text-muted-foreground">12 Sessions</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-blue-500 rounded-full" style={{ width: "0%" }} />
-                              </div>
-                              <span className="text-xs text-blue-600 font-medium">null</span>
-                              <span className="font-medium text-sm">₹4,000</span>
-                            </div>
-                          </div>
-                        </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                    </div>
-
-                    {/* Payments Section */}
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <h5 className="font-semibold text-sm">Payments (2)</h5>
-                        <span className="text-xs text-yellow-600">Due: Oct 1, 2026</span>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                          <div className="flex items-center gap-3">
-                            <div className="p-1.5 rounded bg-green-500/10">
-                              <CheckCircle2 className="w-4 h-4 text-green-600" />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-semibold text-sm">₹12,500</span>
-                                <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Paid</Badge>
-                              </div>
-                              <p className="text-xs text-muted-foreground">Credit Card • Sep 15, 2025 at 2:30 PM</p>
-                              <p className="text-xs text-muted-foreground">By: vishal mangal</p>
-                            </div>
-                          </div>
-                          <Button variant="outline" size="sm" className="gap-1.5 h-8 bg-transparent">
-                            <Download className="w-3.5 h-3.5" />
-                            Invoice
-                          </Button>
-                        </div>
-                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                          <div className="flex items-center gap-3">
-                            <div className="p-1.5 rounded bg-yellow-500/10">
-                              <Clock className="w-4 h-4 text-yellow-600" />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-semibold text-sm">₹12,500</span>
-                                <Badge className="bg-yellow-500/10 text-yellow-600 text-xs py-0">Pending</Badge>
-                              </div>
-                              <p className="text-xs text-muted-foreground">Pending</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Footer Actions */}
-                    <div className="p-4 border-t bg-muted/10 flex flex-wrap gap-2">
-                      <Button size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
-                        <CreditCard className="w-3.5 h-3.5" />
-                        Pay Balance
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
-                        <Download className="w-3.5 h-3.5" />
-                        Download All
-                      </Button>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </TabsContent>
 
                 <TabsContent value="past" className="space-y-4">
-                  {/* Membership Order Card Component */}
-                  <div className="p-4 cursor-pointer hover:bg-muted/30 transition-colors">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-muted">
-                          <CreditCard className="w-5 h-5 text-muted-foreground" />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-mono text-sm text-muted-foreground">ORD-2024-045</span>
-                            <Badge className="bg-muted text-muted-foreground">Expired</Badge>
-                          </div>
-                          <h4 className="font-semibold mt-1">Basic Package Yearly</h4>
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                              <Building className="w-3 h-3" />
-                              Ghansoli (TFC-GH-01)
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
-                              Oct 13, 2024 - Oct 12, 2025
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <p className="text-lg font-bold">₹8,000</p>
-                          <p className="text-xs text-muted-foreground">Fully Paid</p>
-                        </div>
-                        <div className="transform transition-transform">
-                          <Activity className="w-5 h-5 text-muted-foreground" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Expanded Content */}
-                  <div className="border-t">
-                    {/* Products Section */}
-                    <div className="p-4 bg-muted/20">
-                      <h5 className="font-semibold mb-3 text-sm">Products (1)</h5>
-                      <div className="space-y-2">
-                        <div className="p-3 rounded-lg bg-background border">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <div className="p-1.5 rounded bg-muted">
-                                <Activity className="w-4 h-4 text-primary" />
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-sm">Gym Membership</span>
-                                  <Badge variant="outline" className="text-xs py-0">Expired</Badge>
+                  <Card>
+                    <CardContent className="p-0">
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b bg-muted/50">
+                              <th className="text-left p-4 font-medium text-sm">Order ID</th>
+                              <th className="text-left p-4 font-medium text-sm">Package / Products</th>
+                              <th className="text-left p-4 font-medium text-sm">Total</th>
+                              <th className="text-left p-4 font-medium text-sm">Paid</th>
+                              <th className="text-left p-4 font-medium text-sm">Balance</th>
+                              <th className="text-left p-4 font-medium text-sm">Period</th>
+                              <th className="text-left p-4 font-medium text-sm">Payment</th>
+                              <th className="text-left p-4 font-medium text-sm">Status</th>
+                              <th className="text-left p-4 font-medium text-sm">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="border-b hover:bg-muted/30 opacity-70">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2024-045</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Basic Package Yearly</p>
+                                  <p className="text-xs text-muted-foreground">Gym Membership</p>
+                                  <p className="text-xs text-muted-foreground">Oct 13, 2024 - Oct 12, 2025</p>
                                 </div>
-                                <p className="text-xs text-muted-foreground">12 Months</p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-muted rounded-full" style={{ width: "0%" }} />
-                              </div>
-                              <span className="text-xs text-muted-foreground">0d</span>
-                              <span className="font-medium text-sm">₹8,000</span>
-                            </div>
-                          </div>
-                        </div>
+                              </td>
+                              <td className="p-4 font-semibold">₹8,000</td>
+                              <td className="p-4 text-muted-foreground">₹8,000</td>
+                              <td className="p-4 text-muted-foreground">₹0</td>
+                              <td className="p-4 text-muted-foreground text-xs">12 months</td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-xs">UPI</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-1">
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <Activity className="w-4 h-4" />
+                                    View
+                                  </Button>
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <RefreshCw className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr className="border-b hover:bg-muted/30 opacity-70">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2024-022</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Individual Product</p>
+                                  <p className="text-xs text-muted-foreground">Crossfit (12 slots)</p>
+                                  <p className="text-xs text-muted-foreground">Jun 1, 2024 - Aug 31, 2024</p>
+                                </div>
+                              </td>
+                              <td className="p-4 font-semibold">₹4,500</td>
+                              <td className="p-4 text-muted-foreground">₹4,500</td>
+                              <td className="p-4 text-muted-foreground">₹0</td>
+                              <td className="p-4 text-muted-foreground text-xs">3 months</td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-xs">Cash</Badge>
+                              </td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-1">
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <Activity className="w-4 h-4" />
+                                    View
+                                  </Button>
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <RefreshCw className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr className="hover:bg-muted/30 opacity-70">
+                              <td className="p-4">
+                                <span className="font-mono text-sm">ORD-2023-089</span>
+                              </td>
+                              <td className="p-4">
+                                <div>
+                                  <p className="font-medium text-sm">Standard Package 6 Months</p>
+                                  <p className="text-xs text-muted-foreground">Gym Membership, Sauna</p>
+                                  <p className="text-xs text-muted-foreground">Apr 1, 2024 - Sep 30, 2024</p>
+                                </div>
+                              </td>
+                              <td className="p-4 font-semibold">₹6,500</td>
+                              <td className="p-4 text-muted-foreground">₹6,500</td>
+                              <td className="p-4 text-muted-foreground">₹0</td>
+                              <td className="p-4 text-muted-foreground text-xs">6 months</td>
+                              <td className="p-4">
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge variant="outline" className="text-xs">UPI</Badge>
+                                  <Badge variant="outline" className="text-xs">Cash</Badge>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-1">
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <Activity className="w-4 h-4" />
+                                    View
+                                  </Button>
+                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
+                                    <RefreshCw className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                    </div>
-
-                    {/* Payments Section */}
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <h5 className="font-semibold text-sm">Payments (1)</h5>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                          <div className="flex items-center gap-3">
-                            <div className="p-1.5 rounded bg-green-500/10">
-                              <CheckCircle2 className="w-4 h-4 text-green-600" />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-semibold text-sm">₹8,000</span>
-                                <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Paid</Badge>
-                              </div>
-                              <p className="text-xs text-muted-foreground">UPI • Oct 10, 2024 at 11:00 AM</p>
-                              <p className="text-xs text-muted-foreground">By: amit shah</p>
-                            </div>
-                          </div>
-                          <Button variant="outline" size="sm" className="gap-1.5 h-8 bg-transparent">
-                            <Download className="w-3.5 h-3.5" />
-                            Invoice
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Footer Actions */}
-                    <div className="p-4 border-t bg-muted/10 flex flex-wrap gap-2">
-                      <Button size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
-                        <RefreshCw className="w-3.5 h-3.5" />
-                        Renew
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
-                        <Download className="w-3.5 h-3.5" />
-                        Download All
-                      </Button>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 </TabsContent>
               </Tabs>
             </TabsContent>
