@@ -1,5 +1,13 @@
 "use client"
 
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
+
+import { DropdownMenuContent } from "@/components/ui/dropdown-menu"
+
+import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+
+import { DropdownMenu } from "@/components/ui/dropdown-menu"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Sidebar, SidebarProvider, useSidebar } from "@/components/sidebar"
@@ -20,6 +28,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   ArrowLeft,
   Mail,
@@ -47,6 +61,8 @@ import {
   UserPlus,
   UserMinus,
   History,
+  MoreVertical,
+  Eye,
 } from "lucide-react"
 
 // Mock member data
@@ -135,6 +151,20 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
         return <Badge variant="outline">{membership}</Badge>
     }
   }
+
+  // State for order details dialog
+  const [selectedOrder, setSelectedOrder] = useState<{
+    orderId: string
+    packageName: string
+    products: {
+      name: string
+      startDate: string
+      endDate: string
+      slots: number | null
+      usedSlots: number | null
+      daysRemaining: number | null
+    }[]
+  } | null>(null)
 
   return (
     <div className="min-h-screen bg-background">
@@ -560,8 +590,7 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <th className="text-left p-4 font-medium text-sm">Total</th>
                               <th className="text-left p-4 font-medium text-sm">Paid</th>
                               <th className="text-left p-4 font-medium text-sm">Balance</th>
-                              <th className="text-left p-4 font-medium text-sm">Due Date</th>
-                              <th className="text-left p-4 font-medium text-sm">Payment</th>
+                              <th className="text-left p-4 font-medium text-sm">Progress</th>
                               <th className="text-left p-4 font-medium text-sm">Status</th>
                               <th className="text-left p-4 font-medium text-sm">Actions</th>
                             </tr>
@@ -582,20 +611,42 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹10,500</td>
                               <td className="p-4 text-green-600 font-medium">₹10,500</td>
                               <td className="p-4 text-green-600 font-medium">₹0</td>
-                              <td className="p-4 text-muted-foreground">-</td>
                               <td className="p-4">
-                                <div className="flex flex-wrap gap-1">
-                                  <Badge variant="outline" className="text-xs">UPI</Badge>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                    <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
+                                  </div>
+                                  <span className="text-xs text-green-600 font-medium">287d</span>
                                 </div>
                               </td>
                               <td className="p-4">
                                 <Badge className="bg-green-500/10 text-green-600">Active</Badge>
                               </td>
                               <td className="p-4">
-                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
-                                  <Activity className="w-4 h-4" />
-                                  View
-                                </Button>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2025-001",
+                                      packageName: "Standard Package Yearly",
+                                      products: [
+                                        { name: "Gym Membership", startDate: "Oct 13, 2025", endDate: "Oct 12, 2026", slots: null, usedSlots: null, daysRemaining: 287 },
+                                        { name: "Steam Room", startDate: "Oct 13, 2025", endDate: "Oct 12, 2026", slots: null, usedSlots: null, daysRemaining: 287 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                             {/* Active Order 2 - Individual product */}
@@ -613,20 +664,41 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹3,000</td>
                               <td className="p-4 text-green-600 font-medium">₹3,000</td>
                               <td className="p-4 text-green-600 font-medium">₹0</td>
-                              <td className="p-4 text-muted-foreground">-</td>
                               <td className="p-4">
-                                <div className="flex flex-wrap gap-1">
-                                  <Badge variant="outline" className="text-xs">Cash</Badge>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                    <div className="h-full bg-green-500 rounded-full" style={{ width: "33%" }} />
+                                  </div>
+                                  <span className="text-xs text-green-600 font-medium">8/24</span>
                                 </div>
                               </td>
                               <td className="p-4">
                                 <Badge className="bg-green-500/10 text-green-600">Active</Badge>
                               </td>
                               <td className="p-4">
-                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
-                                  <Activity className="w-4 h-4" />
-                                  View
-                                </Button>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2025-002",
+                                      packageName: "Individual Product",
+                                      products: [
+                                        { name: "Yoga Classes", startDate: "Nov 1, 2025", endDate: "Jan 31, 2026", slots: 24, usedSlots: 8, daysRemaining: 102 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                             {/* Upcoming Order - Partial payment */}
@@ -644,21 +716,38 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹25,000</td>
                               <td className="p-4 text-green-600 font-medium">₹12,500</td>
                               <td className="p-4 text-yellow-600 font-medium">₹12,500</td>
-                              <td className="p-4 text-yellow-600">Oct 1, 2026</td>
                               <td className="p-4">
-                                <div className="flex flex-wrap gap-1">
-                                  <Badge variant="outline" className="text-xs">Card</Badge>
-                                  <Badge variant="outline" className="text-xs bg-yellow-500/10 text-yellow-600 border-yellow-500/20">Pending</Badge>
-                                </div>
+                                <span className="text-xs text-blue-600 font-medium">Starts Oct 13</span>
                               </td>
                               <td className="p-4">
                                 <Badge className="bg-blue-500/10 text-blue-600">Upcoming</Badge>
                               </td>
                               <td className="p-4">
-                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
-                                  <Activity className="w-4 h-4" />
-                                  View
-                                </Button>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2025-003",
+                                      packageName: "Premium Package Yearly",
+                                      products: [
+                                        { name: "Gym Membership", startDate: "Oct 13, 2026", endDate: "Oct 12, 2027", slots: null, usedSlots: null, daysRemaining: null },
+                                        { name: "Steam Room", startDate: "Oct 13, 2026", endDate: "Oct 12, 2027", slots: null, usedSlots: null, daysRemaining: null },
+                                        { name: "Personal Training", startDate: "Oct 13, 2026", endDate: "Oct 12, 2027", slots: 12, usedSlots: 0, daysRemaining: null }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                             {/* Past Order 1 */}
@@ -676,20 +765,36 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹8,000</td>
                               <td className="p-4 text-muted-foreground">₹8,000</td>
                               <td className="p-4 text-muted-foreground">₹0</td>
-                              <td className="p-4 text-muted-foreground">-</td>
                               <td className="p-4">
-                                <div className="flex flex-wrap gap-1">
-                                  <Badge variant="outline" className="text-xs">UPI</Badge>
-                                </div>
+                                <span className="text-xs text-muted-foreground">Completed</span>
                               </td>
                               <td className="p-4">
                                 <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
                               </td>
                               <td className="p-4">
-                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
-                                  <Activity className="w-4 h-4" />
-                                  View
-                                </Button>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2024-045",
+                                      packageName: "Basic Package Yearly",
+                                      products: [
+                                        { name: "Gym Membership", startDate: "Oct 13, 2024", endDate: "Oct 12, 2025", slots: null, usedSlots: null, daysRemaining: 0 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                             {/* Past Order 2 */}
@@ -707,20 +812,36 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹4,500</td>
                               <td className="p-4 text-muted-foreground">₹4,500</td>
                               <td className="p-4 text-muted-foreground">₹0</td>
-                              <td className="p-4 text-muted-foreground">-</td>
                               <td className="p-4">
-                                <div className="flex flex-wrap gap-1">
-                                  <Badge variant="outline" className="text-xs">Cash</Badge>
-                                </div>
+                                <span className="text-xs text-muted-foreground">12/12 used</span>
                               </td>
                               <td className="p-4">
                                 <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
                               </td>
                               <td className="p-4">
-                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
-                                  <Activity className="w-4 h-4" />
-                                  View
-                                </Button>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2024-022",
+                                      packageName: "Individual Product",
+                                      products: [
+                                        { name: "Crossfit", startDate: "Jun 1, 2024", endDate: "Aug 31, 2024", slots: 12, usedSlots: 12, daysRemaining: 0 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                             {/* Past Order 3 */}
@@ -738,21 +859,37 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹6,500</td>
                               <td className="p-4 text-muted-foreground">₹6,500</td>
                               <td className="p-4 text-muted-foreground">₹0</td>
-                              <td className="p-4 text-muted-foreground">-</td>
                               <td className="p-4">
-                                <div className="flex flex-wrap gap-1">
-                                  <Badge variant="outline" className="text-xs">UPI</Badge>
-                                  <Badge variant="outline" className="text-xs">Cash</Badge>
-                                </div>
+                                <span className="text-xs text-muted-foreground">Completed</span>
                               </td>
                               <td className="p-4">
                                 <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
                               </td>
                               <td className="p-4">
-                                <Button variant="ghost" size="sm" className="gap-1.5 h-8">
-                                  <Activity className="w-4 h-4" />
-                                  View
-                                </Button>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2023-089",
+                                      packageName: "Standard Package 6 Months",
+                                      products: [
+                                        { name: "Gym Membership", startDate: "Apr 1, 2024", endDate: "Sep 30, 2024", slots: null, usedSlots: null, daysRemaining: 0 },
+                                        { name: "Sauna", startDate: "Apr 1, 2024", endDate: "Sep 30, 2024", slots: null, usedSlots: null, daysRemaining: 0 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                           </tbody>
@@ -774,8 +911,7 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <th className="text-left p-4 font-medium text-sm">Total</th>
                               <th className="text-left p-4 font-medium text-sm">Paid</th>
                               <th className="text-left p-4 font-medium text-sm">Balance</th>
-                              <th className="text-left p-4 font-medium text-sm">Days Left</th>
-                              <th className="text-left p-4 font-medium text-sm">Payment</th>
+                              <th className="text-left p-4 font-medium text-sm">Progress</th>
                               <th className="text-left p-4 font-medium text-sm">Status</th>
                               <th className="text-left p-4 font-medium text-sm">Actions</th>
                             </tr>
@@ -797,28 +933,40 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 text-green-600 font-medium">₹0</td>
                               <td className="p-4">
                                 <div className="flex items-center gap-2">
-                                  <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
+                                  <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
                                     <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
                                   </div>
                                   <span className="text-xs text-green-600 font-medium">287d</span>
                                 </div>
                               </td>
                               <td className="p-4">
-                                <Badge variant="outline" className="text-xs">UPI</Badge>
-                              </td>
-                              <td className="p-4">
                                 <Badge className="bg-green-500/10 text-green-600">Active</Badge>
                               </td>
                               <td className="p-4">
-                                <div className="flex items-center gap-1">
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <Activity className="w-4 h-4" />
-                                    View
-                                  </Button>
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <RefreshCw className="w-4 h-4" />
-                                  </Button>
-                                </div>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2025-001",
+                                      packageName: "Standard Package Yearly",
+                                      products: [
+                                        { name: "Gym Membership", startDate: "Oct 13, 2025", endDate: "Oct 12, 2026", slots: null, usedSlots: null, daysRemaining: 287 },
+                                        { name: "Steam Room", startDate: "Oct 13, 2025", endDate: "Oct 12, 2026", slots: null, usedSlots: null, daysRemaining: 287 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                             <tr className="hover:bg-muted/30">
@@ -837,28 +985,39 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 text-green-600 font-medium">₹0</td>
                               <td className="p-4">
                                 <div className="flex items-center gap-2">
-                                  <div className="w-16 h-1.5 bg-muted rounded-full overflow-hidden">
+                                  <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
                                     <div className="h-full bg-green-500 rounded-full" style={{ width: "33%" }} />
                                   </div>
-                                  <span className="text-xs text-green-600 font-medium">102d</span>
+                                  <span className="text-xs text-green-600 font-medium">8/24</span>
                                 </div>
-                              </td>
-                              <td className="p-4">
-                                <Badge variant="outline" className="text-xs">Cash</Badge>
                               </td>
                               <td className="p-4">
                                 <Badge className="bg-green-500/10 text-green-600">Active</Badge>
                               </td>
                               <td className="p-4">
-                                <div className="flex items-center gap-1">
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <Activity className="w-4 h-4" />
-                                    View
-                                  </Button>
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <RefreshCw className="w-4 h-4" />
-                                  </Button>
-                                </div>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2025-002",
+                                      packageName: "Individual Product",
+                                      products: [
+                                        { name: "Yoga Classes", startDate: "Nov 1, 2025", endDate: "Jan 31, 2026", slots: 24, usedSlots: 8, daysRemaining: 102 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                           </tbody>
@@ -880,8 +1039,7 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <th className="text-left p-4 font-medium text-sm">Total</th>
                               <th className="text-left p-4 font-medium text-sm">Paid</th>
                               <th className="text-left p-4 font-medium text-sm">Balance</th>
-                              <th className="text-left p-4 font-medium text-sm">Due Date</th>
-                              <th className="text-left p-4 font-medium text-sm">Payment</th>
+                              <th className="text-left p-4 font-medium text-sm">Progress</th>
                               <th className="text-left p-4 font-medium text-sm">Status</th>
                               <th className="text-left p-4 font-medium text-sm">Actions</th>
                             </tr>
@@ -901,26 +1059,38 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹25,000</td>
                               <td className="p-4 text-green-600 font-medium">₹12,500</td>
                               <td className="p-4 text-yellow-600 font-medium">₹12,500</td>
-                              <td className="p-4 text-yellow-600">Oct 1, 2026</td>
                               <td className="p-4">
-                                <div className="flex flex-wrap gap-1">
-                                  <Badge variant="outline" className="text-xs">Card</Badge>
-                                  <Badge variant="outline" className="text-xs bg-yellow-500/10 text-yellow-600 border-yellow-500/20">Pending</Badge>
-                                </div>
+                                <span className="text-xs text-blue-600 font-medium">Starts Oct 13</span>
                               </td>
                               <td className="p-4">
                                 <Badge className="bg-blue-500/10 text-blue-600">Upcoming</Badge>
                               </td>
                               <td className="p-4">
-                                <div className="flex items-center gap-1">
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <Activity className="w-4 h-4" />
-                                    View
-                                  </Button>
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <CreditCard className="w-4 h-4" />
-                                  </Button>
-                                </div>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2025-003",
+                                      packageName: "Premium Package Yearly",
+                                      products: [
+                                        { name: "Gym Membership", startDate: "Oct 13, 2026", endDate: "Oct 12, 2027", slots: null, usedSlots: null, daysRemaining: null },
+                                        { name: "Steam Room", startDate: "Oct 13, 2026", endDate: "Oct 12, 2027", slots: null, usedSlots: null, daysRemaining: null },
+                                        { name: "Personal Training", startDate: "Oct 13, 2026", endDate: "Oct 12, 2027", slots: 12, usedSlots: 0, daysRemaining: null }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                           </tbody>
@@ -942,8 +1112,7 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <th className="text-left p-4 font-medium text-sm">Total</th>
                               <th className="text-left p-4 font-medium text-sm">Paid</th>
                               <th className="text-left p-4 font-medium text-sm">Balance</th>
-                              <th className="text-left p-4 font-medium text-sm">Period</th>
-                              <th className="text-left p-4 font-medium text-sm">Payment</th>
+                              <th className="text-left p-4 font-medium text-sm">Progress</th>
                               <th className="text-left p-4 font-medium text-sm">Status</th>
                               <th className="text-left p-4 font-medium text-sm">Actions</th>
                             </tr>
@@ -963,23 +1132,36 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹8,000</td>
                               <td className="p-4 text-muted-foreground">₹8,000</td>
                               <td className="p-4 text-muted-foreground">₹0</td>
-                              <td className="p-4 text-muted-foreground text-xs">12 months</td>
                               <td className="p-4">
-                                <Badge variant="outline" className="text-xs">UPI</Badge>
+                                <span className="text-xs text-muted-foreground">Completed</span>
                               </td>
                               <td className="p-4">
                                 <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
                               </td>
                               <td className="p-4">
-                                <div className="flex items-center gap-1">
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <Activity className="w-4 h-4" />
-                                    View
-                                  </Button>
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <RefreshCw className="w-4 h-4" />
-                                  </Button>
-                                </div>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2024-045",
+                                      packageName: "Basic Package Yearly",
+                                      products: [
+                                        { name: "Gym Membership", startDate: "Oct 13, 2024", endDate: "Oct 12, 2025", slots: null, usedSlots: null, daysRemaining: 0 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                             <tr className="border-b hover:bg-muted/30 opacity-70">
@@ -996,23 +1178,36 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹4,500</td>
                               <td className="p-4 text-muted-foreground">₹4,500</td>
                               <td className="p-4 text-muted-foreground">₹0</td>
-                              <td className="p-4 text-muted-foreground text-xs">3 months</td>
                               <td className="p-4">
-                                <Badge variant="outline" className="text-xs">Cash</Badge>
+                                <span className="text-xs text-muted-foreground">12/12 used</span>
                               </td>
                               <td className="p-4">
                                 <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
                               </td>
                               <td className="p-4">
-                                <div className="flex items-center gap-1">
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <Activity className="w-4 h-4" />
-                                    View
-                                  </Button>
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <RefreshCw className="w-4 h-4" />
-                                  </Button>
-                                </div>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2024-022",
+                                      packageName: "Individual Product",
+                                      products: [
+                                        { name: "Crossfit", startDate: "Jun 1, 2024", endDate: "Aug 31, 2024", slots: 12, usedSlots: 12, daysRemaining: 0 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                             <tr className="hover:bg-muted/30 opacity-70">
@@ -1029,26 +1224,37 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                               <td className="p-4 font-semibold">₹6,500</td>
                               <td className="p-4 text-muted-foreground">₹6,500</td>
                               <td className="p-4 text-muted-foreground">₹0</td>
-                              <td className="p-4 text-muted-foreground text-xs">6 months</td>
                               <td className="p-4">
-                                <div className="flex flex-wrap gap-1">
-                                  <Badge variant="outline" className="text-xs">UPI</Badge>
-                                  <Badge variant="outline" className="text-xs">Cash</Badge>
-                                </div>
+                                <span className="text-xs text-muted-foreground">Completed</span>
                               </td>
                               <td className="p-4">
                                 <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
                               </td>
                               <td className="p-4">
-                                <div className="flex items-center gap-1">
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <Activity className="w-4 h-4" />
-                                    View
-                                  </Button>
-                                  <Button variant="ghost" size="sm" className="gap-1 h-8">
-                                    <RefreshCw className="w-4 h-4" />
-                                  </Button>
-                                </div>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                      <MoreVertical className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setSelectedOrder({
+                                      orderId: "ORD-2023-089",
+                                      packageName: "Standard Package 6 Months",
+                                      products: [
+                                        { name: "Gym Membership", startDate: "Apr 1, 2024", endDate: "Sep 30, 2024", slots: null, usedSlots: null, daysRemaining: 0 },
+                                        { name: "Sauna", startDate: "Apr 1, 2024", endDate: "Sep 30, 2024", slots: null, usedSlots: null, daysRemaining: 0 }
+                                      ]
+                                    })}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download Invoice
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </td>
                             </tr>
                           </tbody>
@@ -1261,6 +1467,90 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
           </Tabs>
         </div>
       </main>
+
+      {/* Order Details Dialog */}
+      <Dialog open={!!selectedOrder} onOpenChange={(open) => !open && setSelectedOrder(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-primary" />
+              Order Details - {selectedOrder?.orderId}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedOrder && (
+            <div className="space-y-4">
+              <div className="p-3 rounded-lg bg-muted/50">
+                <p className="font-semibold">{selectedOrder.packageName}</p>
+                <p className="text-sm text-muted-foreground">{selectedOrder.products.length} product(s)</p>
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-semibold text-sm">Products</h4>
+                {selectedOrder.products.map((product, idx) => (
+                  <div key={idx} className="p-3 rounded-lg border">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium">{product.name}</p>
+                        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs text-muted-foreground">
+                          <span>Start: {product.startDate}</span>
+                          <span>End: {product.endDate}</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        {product.slots !== null ? (
+                          <div>
+                            <p className="font-semibold text-sm">{product.usedSlots}/{product.slots}</p>
+                            <p className="text-xs text-muted-foreground">slots used</p>
+                          </div>
+                        ) : product.daysRemaining !== null && product.daysRemaining > 0 ? (
+                          <div>
+                            <p className="font-semibold text-sm text-green-600">{product.daysRemaining}d</p>
+                            <p className="text-xs text-muted-foreground">remaining</p>
+                          </div>
+                        ) : product.daysRemaining === 0 ? (
+                          <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
+                        ) : (
+                          <Badge className="bg-blue-500/10 text-blue-600">Upcoming</Badge>
+                        )}
+                      </div>
+                    </div>
+                    {product.slots !== null && (
+                      <div className="mt-2">
+                        <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-primary rounded-full" 
+                            style={{ width: `${(product.usedSlots! / product.slots) * 100}%` }} 
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {product.daysRemaining !== null && product.daysRemaining > 0 && product.slots === null && (
+                      <div className="mt-2">
+                        <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-green-500 rounded-full" 
+                            style={{ width: `${Math.min((product.daysRemaining / 365) * 100, 100)}%` }} 
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <Button variant="outline" className="flex-1 gap-2 bg-transparent" onClick={() => setSelectedOrder(null)}>
+                  Close
+                </Button>
+                <Button className="flex-1 gap-2">
+                  <Download className="w-4 h-4" />
+                  Download Invoice
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
