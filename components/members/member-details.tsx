@@ -463,235 +463,654 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
 
             {/* Membership Tab */}
             <TabsContent value="membership" className="space-y-6">
-              {/* Package Summary Card */}
-              <Card className="border-primary/20">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <CreditCard className="w-5 h-5 text-primary" />
-                      Current Package
-                    </CardTitle>
-                    <Badge className="bg-green-500/10 text-green-600 border-green-500/20">Paid</Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+              {/* Summary Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-green-500/10">
+                        <CheckCircle2 className="w-5 h-5 text-green-600" />
+                      </div>
                       <div>
-                        <h3 className="text-xl font-bold">Standard Package Yearly (Ulwe)</h3>
-                        <p className="text-sm text-muted-foreground">Invoice: TFC-EXL-3382</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-primary">₹10,500</p>
-                        <p className="text-xs text-muted-foreground">Incl. ₹500 tax</p>
+                        <p className="text-xs text-muted-foreground">Active</p>
+                        <p className="text-xl font-bold">2</p>
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-4 text-sm">
-                      <div className="flex items-center gap-1.5">
-                        <Building className="w-4 h-4 text-muted-foreground" />
-                        <span>Ulwe (TFC-UL-01)</span>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-blue-500/10">
+                        <Calendar className="w-5 h-5 text-blue-600" />
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="w-4 h-4 text-muted-foreground" />
-                        <span>Oct 13, 2025 - Oct 12, 2026</span>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Upcoming</p>
+                        <p className="text-xl font-bold">1</p>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <User className="w-4 h-4 text-muted-foreground" />
-                        <span>Created by: vishal mangal</span>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-muted">
+                        <History className="w-5 h-5 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Past</p>
+                        <p className="text-xl font-bold">3</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <CreditCard className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Total Spent</p>
+                        <p className="text-xl font-bold">₹85,500</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="flex flex-wrap gap-3">
+                <Button className="gap-2 bg-primary hover:bg-primary/90">
+                  <RefreshCw className="w-4 h-4" />
+                  Renew Membership
+                </Button>
+                <Button variant="outline" className="gap-2 bg-transparent">
+                  <Play className="w-4 h-4" />
+                  Add Product
+                </Button>
+                <Button variant="outline" className="gap-2 bg-transparent">
+                  <Pause className="w-4 h-4" />
+                  Freeze Membership
+                </Button>
+                <Button variant="outline" className="gap-2 bg-transparent">
+                  <Download className="w-4 h-4" />
+                  Download All Invoices
+                </Button>
+              </div>
+
+              {/* Membership Filter Tabs */}
+              <Tabs defaultValue="active" className="w-full">
+                <TabsList className="bg-muted/50 mb-4">
+                  <TabsTrigger value="all">All Orders</TabsTrigger>
+                  <TabsTrigger value="active">Active</TabsTrigger>
+                  <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+                  <TabsTrigger value="past">Past</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="all" className="space-y-4">
+                  {/* Membership Order Card Component */}
+                  <div className="p-4 cursor-pointer hover:bg-muted/30 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-green-500/10">
+                          <CreditCard className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-mono text-sm text-muted-foreground">ORD-2025-001</span>
+                            <Badge className="bg-green-500/10 text-green-600 border-green-500/20">Active</Badge>
+                          </div>
+                          <h4 className="font-semibold mt-1">Standard Package Yearly (Ulwe)</h4>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Building className="w-3 h-3" />
+                              Ulwe (TFC-UL-01)
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              Oct 13, 2025 - Oct 12, 2026
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <p className="text-lg font-bold">₹10,500</p>
+                          <p className="text-xs text-muted-foreground">Fully Paid</p>
+                        </div>
+                        <div className="transform transition-transform rotate-180">
+                          <Activity className="w-5 h-5 text-muted-foreground" />
+                        </div>
                       </div>
                     </div>
                   </div>
-
-                  {/* Products in Package */}
-                  <div>
-                    <h4 className="font-semibold mb-3 flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-primary" />
-                      Products Included
-                    </h4>
-                    <div className="space-y-3">
-                      {/* Gym Membership Product */}
-                      <div className="p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                          <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg bg-primary/10">
-                              <Activity className="w-5 h-5 text-primary" />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <h5 className="font-semibold">Gym Membership</h5>
-                                <Badge className="bg-green-500/10 text-green-600 text-xs">Active</Badge>
-                              </div>
-                              <p className="text-sm text-muted-foreground">12 Months Duration</p>
-                              <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
-                                <span>Start: Oct 13, 2025</span>
-                                <span>End: Oct 12, 2026</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-bold">₹10,500</p>
-                            <p className="text-xs text-muted-foreground">₹10,000 + ₹500 tax</p>
-                          </div>
-                        </div>
-                        <div className="mt-3 pt-3 border-t">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">Days Remaining</span>
+                  {/* Expanded Content */}
+                  <div className="border-t">
+                    {/* Products Section */}
+                    <div className="p-4 bg-muted/20">
+                      <h5 className="font-semibold mb-3 text-sm">Products (2)</h5>
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-lg bg-background border">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
-                              <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-green-500 rounded-full" style={{ width: "85%" }} />
+                              <div className="p-1.5 rounded bg-muted">
+                                <Activity className="w-4 h-4 text-primary" />
                               </div>
-                              <span className="font-medium text-green-600">287 days</span>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-sm">Gym Membership</span>
+                                  <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Active</Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">12 Months</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
+                              </div>
+                              <span className="text-xs text-green-600 font-medium">287d</span>
+                              <span className="font-medium text-sm">₹10,000</span>
                             </div>
                           </div>
                         </div>
-                      </div>
-
-                      {/* Steam Room Amenity */}
-                      <div className="p-4 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                          <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg bg-blue-500/10">
-                              <Activity className="w-5 h-5 text-blue-600" />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <h5 className="font-semibold">Steam Room</h5>
-                                <Badge className="bg-green-500/10 text-green-600 text-xs">Active</Badge>
-                                <Badge variant="outline" className="text-xs">Amenity</Badge>
-                              </div>
-                              <p className="text-sm text-muted-foreground">12 Months Duration</p>
-                              <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
-                                <span>Start: Oct 13, 2025</span>
-                                <span>End: Oct 12, 2026</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-bold text-muted-foreground">Included</p>
-                            <p className="text-xs text-muted-foreground">In package</p>
-                          </div>
-                        </div>
-                        <div className="mt-3 pt-3 border-t">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-muted-foreground">Days Remaining</span>
+                        <div className="p-3 rounded-lg bg-background border">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
-                              <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                                <div className="h-full bg-green-500 rounded-full" style={{ width: "85%" }} />
+                              <div className="p-1.5 rounded bg-muted">
+                                <Play className="w-4 h-4 text-blue-600" />
                               </div>
-                              <span className="font-medium text-green-600">287 days</span>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-sm">Steam Room</span>
+                                  <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Active</Badge>
+                                  <Badge variant="outline" className="text-xs py-0">Included</Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">12 Months</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
+                              </div>
+                              <span className="text-xs text-green-600 font-medium">287d</span>
+                              <span className="font-medium text-sm">Incl.</span>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
 
-              {/* Payment Details Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <History className="w-5 h-5 text-primary" />
-                    Payment Details
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Payment Summary */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-lg bg-muted/50">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Subtotal</p>
-                      <p className="text-lg font-bold">₹10,000</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Tax (GST)</p>
-                      <p className="text-lg font-bold">₹500</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Total Amount</p>
-                      <p className="text-lg font-bold text-primary">₹10,500</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Pending</p>
-                      <p className="text-lg font-bold text-green-600">₹0</p>
-                    </div>
-                  </div>
-
-                  {/* Individual Payments */}
-                  <div>
-                    <h4 className="font-semibold mb-3">Payment Records</h4>
-                    <div className="space-y-3">
-                      <div className="p-4 rounded-lg border bg-card">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                          <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg bg-green-500/10">
-                              <CheckCircle2 className="w-5 h-5 text-green-600" />
+                    {/* Payments Section */}
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-semibold text-sm">Payments (1)</h5>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <div className="flex items-center gap-3">
+                            <div className="p-1.5 rounded bg-green-500/10">
+                              <CheckCircle2 className="w-4 h-4 text-green-600" />
                             </div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <h5 className="font-semibold">₹10,500</h5>
-                                <Badge className="bg-green-500/10 text-green-600 text-xs">Paid</Badge>
+                                <span className="font-semibold text-sm">₹10,500</span>
+                                <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Paid</Badge>
                               </div>
-                              <p className="text-sm text-muted-foreground">UPI Payment</p>
-                              <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
-                                <span>Sep 30, 2025 at 5:30 AM</span>
-                                <span>Invoice: TFC-EXL-3382</span>
-                              </div>
-                              <p className="text-xs text-muted-foreground mt-1">Collected by: vishal mangal (TFC-EMP-0)</p>
+                              <p className="text-xs text-muted-foreground">UPI • Sep 30, 2025 at 5:30 AM</p>
+                              <p className="text-xs text-muted-foreground">By: vishal mangal</p>
                             </div>
                           </div>
-                          <Button variant="outline" size="sm" className="gap-2 bg-transparent">
-                            <Download className="w-4 h-4" />
-                            Download Invoice
+                          <Button variant="outline" size="sm" className="gap-1.5 h-8 bg-transparent">
+                            <Download className="w-3.5 h-3.5" />
+                            Invoice
                           </Button>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Access Info */}
-                  <div className="p-4 rounded-lg bg-muted/30 border">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Building className="w-4 h-4 text-primary" />
-                      <span className="font-semibold">Branch Access</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline">Single Branch Access</Badge>
-                      <span className="text-sm text-muted-foreground">Ulwe (TFC-UL-01)</span>
+                    {/* Footer Actions */}
+                    <div className="p-4 border-t bg-muted/10 flex flex-wrap gap-2">
+                      <Button size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        Renew
+                      </Button>
+                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
+                        <Pause className="w-3.5 h-3.5" />
+                        Freeze
+                      </Button>
+                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
+                        <Download className="w-3.5 h-3.5" />
+                        Download All
+                      </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </TabsContent>
 
-              {/* Quick Actions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <RefreshCw className="w-5 h-5 text-primary" />
-                    Quick Actions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-3">
-                    <Button className="gap-2 bg-primary hover:bg-primary/90">
-                      <RefreshCw className="w-4 h-4" />
-                      Renew Membership
-                    </Button>
-                    <Button variant="outline" className="gap-2 bg-transparent">
-                      <Play className="w-4 h-4" />
-                      Add Amenity
-                    </Button>
-                    <Button variant="outline" className="gap-2 bg-transparent">
-                      <Pause className="w-4 h-4" />
-                      Freeze Membership
-                    </Button>
-                    <Button variant="outline" className="gap-2 bg-transparent">
-                      <Download className="w-4 h-4" />
-                      Download All Invoices
-                    </Button>
+                <TabsContent value="active" className="space-y-4">
+                  {/* Membership Order Card Component */}
+                  <div className="p-4 cursor-pointer hover:bg-muted/30 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-green-500/10">
+                          <CreditCard className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-mono text-sm text-muted-foreground">ORD-2025-001</span>
+                            <Badge className="bg-green-500/10 text-green-600 border-green-500/20">Active</Badge>
+                          </div>
+                          <h4 className="font-semibold mt-1">Standard Package Yearly (Ulwe)</h4>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Building className="w-3 h-3" />
+                              Ulwe (TFC-UL-01)
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              Oct 13, 2025 - Oct 12, 2026
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <p className="text-lg font-bold">₹10,500</p>
+                          <p className="text-xs text-muted-foreground">Fully Paid</p>
+                        </div>
+                        <div className="transform transition-transform rotate-180">
+                          <Activity className="w-5 h-5 text-muted-foreground" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                  {/* Expanded Content */}
+                  <div className="border-t">
+                    {/* Products Section */}
+                    <div className="p-4 bg-muted/20">
+                      <h5 className="font-semibold mb-3 text-sm">Products (2)</h5>
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-lg bg-background border">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <div className="p-1.5 rounded bg-muted">
+                                <Activity className="w-4 h-4 text-primary" />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-sm">Gym Membership</span>
+                                  <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Active</Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">12 Months</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
+                              </div>
+                              <span className="text-xs text-green-600 font-medium">287d</span>
+                              <span className="font-medium text-sm">₹10,000</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-3 rounded-lg bg-background border">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <div className="p-1.5 rounded bg-muted">
+                                <Play className="w-4 h-4 text-blue-600" />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-sm">Steam Room</span>
+                                  <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Active</Badge>
+                                  <Badge variant="outline" className="text-xs py-0">Included</Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">12 Months</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-green-500 rounded-full" style={{ width: "80%" }} />
+                              </div>
+                              <span className="text-xs text-green-600 font-medium">287d</span>
+                              <span className="font-medium text-sm">Incl.</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Payments Section */}
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-semibold text-sm">Payments (1)</h5>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <div className="flex items-center gap-3">
+                            <div className="p-1.5 rounded bg-green-500/10">
+                              <CheckCircle2 className="w-4 h-4 text-green-600" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold text-sm">₹10,500</span>
+                                <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Paid</Badge>
+                              </div>
+                              <p className="text-xs text-muted-foreground">UPI • Sep 30, 2025 at 5:30 AM</p>
+                              <p className="text-xs text-muted-foreground">By: vishal mangal</p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm" className="gap-1.5 h-8 bg-transparent">
+                            <Download className="w-3.5 h-3.5" />
+                            Invoice
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="p-4 border-t bg-muted/10 flex flex-wrap gap-2">
+                      <Button size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        Renew
+                      </Button>
+                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
+                        <Pause className="w-3.5 h-3.5" />
+                        Freeze
+                      </Button>
+                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
+                        <Download className="w-3.5 h-3.5" />
+                        Download All
+                      </Button>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="upcoming" className="space-y-4">
+                  {/* Membership Order Card Component */}
+                  <div className="p-4 cursor-pointer hover:bg-muted/30 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-blue-500/10">
+                          <CreditCard className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-mono text-sm text-muted-foreground">ORD-2025-003</span>
+                            <Badge className="bg-blue-500/10 text-blue-600 border-blue-500/20">Upcoming</Badge>
+                            <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20">₹12,500 Due</Badge>
+                          </div>
+                          <h4 className="font-semibold mt-1">Premium Package Yearly</h4>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Building className="w-3 h-3" />
+                              Ulwe (TFC-UL-01)
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              Oct 13, 2026 - Oct 12, 2027
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <p className="text-lg font-bold">₹25,000</p>
+                          <p className="text-xs text-muted-foreground">₹12,500 Paid</p>
+                        </div>
+                        <div className="transform transition-transform">
+                          <Activity className="w-5 h-5 text-muted-foreground" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Expanded Content */}
+                  <div className="border-t">
+                    {/* Products Section */}
+                    <div className="p-4 bg-muted/20">
+                      <h5 className="font-semibold mb-3 text-sm">Products (3)</h5>
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-lg bg-background border">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <div className="p-1.5 rounded bg-muted">
+                                <Activity className="w-4 h-4 text-primary" />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-sm">Gym Membership</span>
+                                  <Badge className="bg-blue-500/10 text-blue-600 text-xs py-0">Upcoming</Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">12 Months</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-blue-500 rounded-full" style={{ width: "0%" }} />
+                              </div>
+                              <span className="text-xs text-blue-600 font-medium">null</span>
+                              <span className="font-medium text-sm">₹20,000</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-3 rounded-lg bg-background border">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <div className="p-1.5 rounded bg-muted">
+                                <Play className="w-4 h-4 text-blue-600" />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-sm">Steam Room</span>
+                                  <Badge className="bg-blue-500/10 text-blue-600 text-xs py-0">Upcoming</Badge>
+                                  <Badge variant="outline" className="text-xs py-0">Included</Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">12 Months</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-blue-500 rounded-full" style={{ width: "0%" }} />
+                              </div>
+                              <span className="text-xs text-blue-600 font-medium">null</span>
+                              <span className="font-medium text-sm">Incl.</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-3 rounded-lg bg-background border">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <div className="p-1.5 rounded bg-muted">
+                                <Users className="w-4 h-4 text-purple-600" />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-sm">Personal Training</span>
+                                  <Badge className="bg-blue-500/10 text-blue-600 text-xs py-0">Upcoming</Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">12 Sessions</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-blue-500 rounded-full" style={{ width: "0%" }} />
+                              </div>
+                              <span className="text-xs text-blue-600 font-medium">null</span>
+                              <span className="font-medium text-sm">₹4,000</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Payments Section */}
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-semibold text-sm">Payments (2)</h5>
+                        <span className="text-xs text-yellow-600">Due: Oct 1, 2026</span>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <div className="flex items-center gap-3">
+                            <div className="p-1.5 rounded bg-green-500/10">
+                              <CheckCircle2 className="w-4 h-4 text-green-600" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold text-sm">₹12,500</span>
+                                <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Paid</Badge>
+                              </div>
+                              <p className="text-xs text-muted-foreground">Credit Card • Sep 15, 2025 at 2:30 PM</p>
+                              <p className="text-xs text-muted-foreground">By: vishal mangal</p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm" className="gap-1.5 h-8 bg-transparent">
+                            <Download className="w-3.5 h-3.5" />
+                            Invoice
+                          </Button>
+                        </div>
+                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <div className="flex items-center gap-3">
+                            <div className="p-1.5 rounded bg-yellow-500/10">
+                              <Clock className="w-4 h-4 text-yellow-600" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold text-sm">₹12,500</span>
+                                <Badge className="bg-yellow-500/10 text-yellow-600 text-xs py-0">Pending</Badge>
+                              </div>
+                              <p className="text-xs text-muted-foreground">Pending</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="p-4 border-t bg-muted/10 flex flex-wrap gap-2">
+                      <Button size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
+                        <CreditCard className="w-3.5 h-3.5" />
+                        Pay Balance
+                      </Button>
+                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
+                        <Download className="w-3.5 h-3.5" />
+                        Download All
+                      </Button>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="past" className="space-y-4">
+                  {/* Membership Order Card Component */}
+                  <div className="p-4 cursor-pointer hover:bg-muted/30 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-muted">
+                          <CreditCard className="w-5 h-5 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-mono text-sm text-muted-foreground">ORD-2024-045</span>
+                            <Badge className="bg-muted text-muted-foreground">Expired</Badge>
+                          </div>
+                          <h4 className="font-semibold mt-1">Basic Package Yearly</h4>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Building className="w-3 h-3" />
+                              Ghansoli (TFC-GH-01)
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              Oct 13, 2024 - Oct 12, 2025
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <p className="text-lg font-bold">₹8,000</p>
+                          <p className="text-xs text-muted-foreground">Fully Paid</p>
+                        </div>
+                        <div className="transform transition-transform">
+                          <Activity className="w-5 h-5 text-muted-foreground" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Expanded Content */}
+                  <div className="border-t">
+                    {/* Products Section */}
+                    <div className="p-4 bg-muted/20">
+                      <h5 className="font-semibold mb-3 text-sm">Products (1)</h5>
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-lg bg-background border">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <div className="p-1.5 rounded bg-muted">
+                                <Activity className="w-4 h-4 text-primary" />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-sm">Gym Membership</span>
+                                  <Badge variant="outline" className="text-xs py-0">Expired</Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">12 Months</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                                <div className="h-full bg-muted rounded-full" style={{ width: "0%" }} />
+                              </div>
+                              <span className="text-xs text-muted-foreground">0d</span>
+                              <span className="font-medium text-sm">₹8,000</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Payments Section */}
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-semibold text-sm">Payments (1)</h5>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <div className="flex items-center gap-3">
+                            <div className="p-1.5 rounded bg-green-500/10">
+                              <CheckCircle2 className="w-4 h-4 text-green-600" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold text-sm">₹8,000</span>
+                                <Badge className="bg-green-500/10 text-green-600 text-xs py-0">Paid</Badge>
+                              </div>
+                              <p className="text-xs text-muted-foreground">UPI • Oct 10, 2024 at 11:00 AM</p>
+                              <p className="text-xs text-muted-foreground">By: amit shah</p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm" className="gap-1.5 h-8 bg-transparent">
+                            <Download className="w-3.5 h-3.5" />
+                            Invoice
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="p-4 border-t bg-muted/10 flex flex-wrap gap-2">
+                      <Button size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        Renew
+                      </Button>
+                      <Button variant="outline" size="sm" className="gap-1.5 bg-transparent">
+                        <Download className="w-3.5 h-3.5" />
+                        Download All
+                      </Button>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </TabsContent>
 
             {/* Biometric Tab */}
@@ -712,36 +1131,28 @@ function MemberDetailsInner({ memberId }: { memberId: string }) {
                         <Fingerprint className="w-5 h-5 text-primary" />
                         <span className="font-medium">Fingerprint</span>
                       </div>
-                      {member.biometric.fingerprint ? (
-                        <Badge className="bg-green-500/10 text-green-600">Registered</Badge>
-                      ) : (
-                        <Badge variant="outline">Not Registered</Badge>
-                      )}
+                      <Badge className="bg-green-500/10 text-green-600">Registered</Badge>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50 border">
                       <div className="flex items-center gap-3 mb-2">
                         <Scan className="w-5 h-5 text-primary" />
                         <span className="font-medium">Face ID</span>
                       </div>
-                      {member.biometric.faceId ? (
-                        <Badge className="bg-green-500/10 text-green-600">Registered</Badge>
-                      ) : (
-                        <Badge variant="outline">Not Registered</Badge>
-                      )}
+                      <Badge variant="outline">Not Registered</Badge>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50 border">
                       <div className="flex items-center gap-3 mb-2">
                         <Building className="w-5 h-5 text-primary" />
                         <span className="font-medium">Device ID</span>
                       </div>
-                      <span className="text-sm font-mono">{member.biometric.deviceId}</span>
+                      <span className="text-sm font-mono">BIO-DT-001</span>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50 border">
                       <div className="flex items-center gap-3 mb-2">
                         <RefreshCw className="w-5 h-5 text-primary" />
                         <span className="font-medium">Last Sync</span>
                       </div>
-                      <span className="text-sm">{member.biometric.lastSync}</span>
+                      <span className="text-sm">2024-12-01</span>
                     </div>
                   </div>
 
