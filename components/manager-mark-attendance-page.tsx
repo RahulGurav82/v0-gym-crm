@@ -9,13 +9,103 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
-import { CalendarIcon, CheckCircle, Plus, Trash2, Send, Save, ArrowLeft } from "lucide-react"
+import { CalendarIcon, CheckCircle, Plus, Trash2, Send, Save, ArrowLeft, Clock, Check, X, Eye } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format } from "date-fns"
 import { useRouter } from "next/navigation"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 const departments = ["Training", "Sales", "Reception", "Maintenance", "Management"]
+
+// Mock attendance correction requests created by the manager
+const mockCorrectionRequests = [
+  {
+    id: "1",
+    requestId: "ATT-COR-001",
+    employeeId: "EMP001",
+    employeeName: "John Smith",
+    dateRange: {
+      start: "2026-01-25",
+      end: "2026-01-28",
+    },
+    submittedDate: "2026-01-29",
+    status: "pending",
+    days: 4,
+    reason: "Incorrect punch in/out times due to system error",
+    requestedBy: { name: "Manager A" },
+    attendance: {
+      "2026-01-25": { checkIn: "09:15 AM", checkOut: "06:30 PM", totalHours: "9h 15m" },
+      "2026-01-26": { checkIn: "09:00 AM", checkOut: "06:00 PM", totalHours: "9h 0m" },
+      "2026-01-27": { checkIn: "09:00 AM", checkOut: "06:00 PM", totalHours: "9h 0m" },
+      "2026-01-28": { checkIn: "09:00 AM", checkOut: "06:00 PM", totalHours: "9h 0m" },
+    },
+  },
+  {
+    id: "2",
+    requestId: "ATT-COR-002",
+    employeeId: "EMP002",
+    employeeName: "Sarah Wilson",
+    dateRange: {
+      start: "2026-01-20",
+      end: "2026-01-22",
+    },
+    submittedDate: "2026-01-23",
+    status: "approved",
+    days: 3,
+    reason: "Late arrival due to medical appointment",
+    requestedBy: { name: "Manager B" },
+    attendance: {
+      "2026-01-20": { checkIn: "08:45 AM", checkOut: "05:45 PM", totalHours: "9h 0m" },
+      "2026-01-21": { checkIn: "08:45 AM", checkOut: "05:45 PM", totalHours: "9h 0m" },
+      "2026-01-22": { checkIn: "08:45 AM", checkOut: "05:45 PM", totalHours: "9h 0m" },
+    },
+  },
+  {
+    id: "3",
+    requestId: "ATT-COR-003",
+    employeeId: "EMP003",
+    employeeName: "Mike Johnson",
+    dateRange: {
+      start: "2026-01-15",
+      end: "2026-01-15",
+    },
+    submittedDate: "2026-01-28",
+    status: "approved",
+    days: 1,
+    reason: "System sync issue - corrected punch records",
+    requestedBy: { name: "Manager C" },
+    attendance: {
+      "2026-01-15": { checkIn: "10:00 AM", checkOut: "07:00 PM", totalHours: "9h 0m" },
+    },
+  },
+  {
+    id: "4",
+    requestId: "ATT-COR-004",
+    employeeId: "EMP004",
+    employeeName: "Emily Brown",
+    dateRange: {
+      start: "2026-01-18",
+      end: "2026-01-19",
+    },
+    submittedDate: "2026-01-27",
+    status: "rejected",
+    days: 2,
+    reason: "Unauthorized absence correction",
+    requestedBy: { name: "Manager D" },
+    attendance: {
+      "2026-01-18": { checkIn: "09:00 AM", checkOut: "02:00 PM", totalHours: "5h 0m" },
+      "2026-01-19": { checkIn: "03:00 PM", checkOut: "06:00 PM", totalHours: "3h 0m" },
+    },
+  },
+]
 
 const employees = [
   {
@@ -119,6 +209,12 @@ function ManagerMarkAttendanceInner() {
   const [startDate, setStartDate] = useState<Date>()
   const [endDate, setEndDate] = useState<Date>()
   const [attendanceData, setAttendanceData] = useState<EmployeeAttendance[]>([])
+  const [correctionRequests, setCorrectionRequests] = useState(mockCorrectionRequests)
+  const [selectedRequest, setSelectedRequest] = useState<(typeof mockCorrectionRequests)[0] | null>(null)
+  const [showRequestDialog, setShowRequestDialog] = useState(false)
+  const [actionType, setActionType] = useState<"approve" | "reject" | null>(null)
+  const [pendingRequests, setPendingRequests] = useState(mockCorrectionRequests.filter(req => req.status === 'pending'));
+  const [showRequestDetails, setShowRequestDetails] = useState(false);
 
   const handleDepartmentNext = () => {
     if (selectedDepartment) {
@@ -267,6 +363,46 @@ function ManagerMarkAttendanceInner() {
     setSelectedEmployees((prev) => (prev.includes(empId) ? prev.filter((id) => id !== empId) : [...prev, empId]))
   }
 
+  const handleViewRequest = (request: (typeof mockCorrectionRequests)[0]) => {
+    setSelectedRequest(request)
+    setShowRequestDialog(true)
+  }
+
+  const getStatusBadgeColor = (status: string) => {
+    switch (status) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 border-yellow-300"
+      case "approved":
+        return "bg-green-100 text-green-800 border-green-300"
+      case "rejected":
+        return "bg-red-100 text-red-800 border-red-300"
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-300"
+    }
+  }
+
+  const handleRequestAction = (request: (typeof mockCorrectionRequests)[0], action: "approve" | "reject") => {
+    setActionType(action)
+    setSelectedRequest(request)
+  }
+
+  const confirmRequestAction = () => {
+    if (selectedRequest && actionType) {
+      const updatedRequests = correctionRequests.map(req => {
+        if (req.id === selectedRequest.id) {
+          return { ...req, status: actionType }
+        }
+        return req
+      })
+      setCorrectionRequests(updatedRequests)
+      setPendingRequests(updatedRequests.filter(req => req.status === 'pending'))
+      setActionType(null)
+      setSelectedRequest(null)
+      setShowRequestDialog(false)
+      alert(`Request ${actionType === "approve" ? "approved" : "rejected"}`)
+    }
+  }
+
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar role="manager" />
@@ -288,6 +424,67 @@ function ManagerMarkAttendanceInner() {
               Step {step} of 3
             </Badge>
           </div>
+
+          {/* Submitted Correction Requests Table */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>My Submitted Requests</CardTitle>
+              <CardDescription>Attendance correction requests you have submitted for approval</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="border rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-muted border-b">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Request ID</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Employee</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Date Range</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Days</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Submitted</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Status</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y">
+                    {correctionRequests.map((request) => (
+                      <tr key={request.id} className="hover:bg-muted/50">
+                        <td className="px-4 py-3 text-sm">
+                          <Badge variant="outline" className="font-mono">
+                            {request.requestId}
+                          </Badge>
+                        </td>
+                        <td className="px-4 py-3 text-sm font-medium">{request.employeeName}</td>
+                        <td className="px-4 py-3 text-sm">
+                          {format(new Date(request.dateRange.start), "MMM dd")} -{" "}
+                          {format(new Date(request.dateRange.end), "MMM dd")}
+                        </td>
+                        <td className="px-4 py-3 text-sm">{request.days} day(s)</td>
+                        <td className="px-4 py-3 text-sm">
+                          {format(new Date(request.submittedDate), "MMM dd, yyyy")}
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          <Badge className={cn("border", getStatusBadgeColor(request.status))}>
+                            {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                          </Badge>
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleViewRequest(request)}
+                            className="gap-1 bg-transparent"
+                          >
+                            <Eye className="w-4 h-4" />
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Step 1: Select Department */}
           {step === 1 && (
@@ -554,6 +751,67 @@ function ManagerMarkAttendanceInner() {
               </div>
             </div>
           )}
+
+          {/* Request Details Dialog */}
+          <Dialog open={showRequestDialog} onOpenChange={setShowRequestDialog}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Request Details</DialogTitle>
+                <DialogDescription>
+                  {selectedRequest?.requestId} - {selectedRequest?.employeeName}
+                </DialogDescription>
+              </DialogHeader>
+
+              {selectedRequest && (
+                <div className="space-y-6">
+                  {/* Request Info */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Employee Name</p>
+                      <p className="font-semibold">{selectedRequest.employeeName}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Request ID</p>
+                      <p className="font-mono text-sm">{selectedRequest.requestId}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Date Range</p>
+                      <p className="font-semibold">
+                        {format(new Date(selectedRequest.dateRange.start), "MMM dd")} -{" "}
+                        {format(new Date(selectedRequest.dateRange.end), "MMM dd, yyyy")}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Submitted Date</p>
+                      <p className="font-semibold">{format(new Date(selectedRequest.submittedDate), "MMM dd, yyyy")}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Days Affected</p>
+                      <p className="font-semibold">{selectedRequest.days} day(s)</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Status</p>
+                      <Badge className={cn("border", getStatusBadgeColor(selectedRequest.status))}>
+                        {selectedRequest.status.charAt(0).toUpperCase() + selectedRequest.status.slice(1)}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Reason */}
+                  <div className="bg-muted p-4 rounded-lg">
+                    <p className="text-xs text-muted-foreground font-medium mb-2">Reason for Correction</p>
+                    <p className="text-sm">{selectedRequest.reason}</p>
+                  </div>
+                </div>
+              )}
+
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setShowRequestDialog(false)}>
+                  Close
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </main>
     </div>
