@@ -25,7 +25,7 @@ import {
 
 const departments = ["Training", "Sales", "Reception", "Maintenance", "Management"]
 
-// Mock attendance correction requests
+// Mock attendance correction requests created by the manager
 const mockCorrectionRequests = [
   {
     id: "1",
@@ -36,16 +36,16 @@ const mockCorrectionRequests = [
       start: "2026-01-25",
       end: "2026-01-28",
     },
-    requestedBy: {
-      name: "Manager Name",
-      role: "Manager",
-    },
+    submittedDate: "2026-01-29",
     status: "pending",
+    days: 4,
+    reason: "Incorrect punch in/out times due to system error",
+    requestedBy: { name: "Manager A" },
     attendance: {
-      "2026-01-25": { checkIn: "19:06", checkOut: "20:06", totalHours: "1h 0m" },
-      "2026-01-26": { checkIn: "20:06", checkOut: "21:11", totalHours: "1h 5m" },
-      "2026-01-27": { checkIn: "22:00", checkOut: "06:00", totalHours: "8h 0m" },
-      "2026-01-28": { checkIn: "22:00", checkOut: "06:00", totalHours: "8h 0m" },
+      "2026-01-25": { checkIn: "09:15 AM", checkOut: "06:30 PM", totalHours: "9h 15m" },
+      "2026-01-26": { checkIn: "09:00 AM", checkOut: "06:00 PM", totalHours: "9h 0m" },
+      "2026-01-27": { checkIn: "09:00 AM", checkOut: "06:00 PM", totalHours: "9h 0m" },
+      "2026-01-28": { checkIn: "09:00 AM", checkOut: "06:00 PM", totalHours: "9h 0m" },
     },
   },
   {
@@ -57,15 +57,52 @@ const mockCorrectionRequests = [
       start: "2026-01-20",
       end: "2026-01-22",
     },
-    requestedBy: {
-      name: "Manager Name",
-      role: "Manager",
-    },
-    status: "pending",
+    submittedDate: "2026-01-23",
+    status: "approved",
+    days: 3,
+    reason: "Late arrival due to medical appointment",
+    requestedBy: { name: "Manager B" },
     attendance: {
-      "2026-01-20": { checkIn: "08:45", checkOut: "17:45", totalHours: "9h 0m" },
-      "2026-01-21": { checkIn: "09:00", checkOut: "18:00", totalHours: "9h 0m" },
-      "2026-01-22": { checkIn: "08:30", checkOut: "16:30", totalHours: "8h 0m" },
+      "2026-01-20": { checkIn: "08:45 AM", checkOut: "05:45 PM", totalHours: "9h 0m" },
+      "2026-01-21": { checkIn: "08:45 AM", checkOut: "05:45 PM", totalHours: "9h 0m" },
+      "2026-01-22": { checkIn: "08:45 AM", checkOut: "05:45 PM", totalHours: "9h 0m" },
+    },
+  },
+  {
+    id: "3",
+    requestId: "ATT-COR-003",
+    employeeId: "EMP003",
+    employeeName: "Mike Johnson",
+    dateRange: {
+      start: "2026-01-15",
+      end: "2026-01-15",
+    },
+    submittedDate: "2026-01-28",
+    status: "approved",
+    days: 1,
+    reason: "System sync issue - corrected punch records",
+    requestedBy: { name: "Manager C" },
+    attendance: {
+      "2026-01-15": { checkIn: "10:00 AM", checkOut: "07:00 PM", totalHours: "9h 0m" },
+    },
+  },
+  {
+    id: "4",
+    requestId: "ATT-COR-004",
+    employeeId: "EMP004",
+    employeeName: "Emily Brown",
+    dateRange: {
+      start: "2026-01-18",
+      end: "2026-01-19",
+    },
+    submittedDate: "2026-01-27",
+    status: "rejected",
+    days: 2,
+    reason: "Unauthorized absence correction",
+    requestedBy: { name: "Manager D" },
+    attendance: {
+      "2026-01-18": { checkIn: "09:00 AM", checkOut: "02:00 PM", totalHours: "5h 0m" },
+      "2026-01-19": { checkIn: "03:00 PM", checkOut: "06:00 PM", totalHours: "3h 0m" },
     },
   },
 ]
@@ -176,6 +213,8 @@ function ManagerMarkAttendanceInner() {
   const [selectedRequest, setSelectedRequest] = useState<(typeof mockCorrectionRequests)[0] | null>(null)
   const [showRequestDialog, setShowRequestDialog] = useState(false)
   const [actionType, setActionType] = useState<"approve" | "reject" | null>(null)
+  const [pendingRequests, setPendingRequests] = useState(mockCorrectionRequests.filter(req => req.status === 'pending'));
+  const [showRequestDetails, setShowRequestDetails] = useState(false);
 
   const handleDepartmentNext = () => {
     if (selectedDepartment) {
@@ -326,31 +365,43 @@ function ManagerMarkAttendanceInner() {
 
   const handleViewRequest = (request: (typeof mockCorrectionRequests)[0]) => {
     setSelectedRequest(request)
-    setActionType(null)
     setShowRequestDialog(true)
   }
 
+  const getStatusBadgeColor = (status: string) => {
+    switch (status) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800 border-yellow-300"
+      case "approved":
+        return "bg-green-100 text-green-800 border-green-300"
+      case "rejected":
+        return "bg-red-100 text-red-800 border-red-300"
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-300"
+    }
+  }
+
   const handleRequestAction = (request: (typeof mockCorrectionRequests)[0], action: "approve" | "reject") => {
-    setSelectedRequest(request)
     setActionType(action)
+    setSelectedRequest(request)
   }
 
   const confirmRequestAction = () => {
     if (selectedRequest && actionType) {
-      setCorrectionRequests((prev) =>
-        prev.map((req) =>
-          req.id === selectedRequest.id
-            ? { ...req, status: actionType === "approve" ? "approved" : "rejected" }
-            : req,
-        ),
-      )
-      setShowRequestDialog(false)
-      setSelectedRequest(null)
+      const updatedRequests = correctionRequests.map(req => {
+        if (req.id === selectedRequest.id) {
+          return { ...req, status: actionType }
+        }
+        return req
+      })
+      setCorrectionRequests(updatedRequests)
+      setPendingRequests(updatedRequests.filter(req => req.status === 'pending'))
       setActionType(null)
+      setSelectedRequest(null)
+      setShowRequestDialog(false)
+      alert(`Request ${actionType === "approve" ? "approved" : "rejected"}`)
     }
   }
-
-  const pendingRequests = correctionRequests.filter((r) => r.status === "pending")
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -374,72 +425,66 @@ function ManagerMarkAttendanceInner() {
             </Badge>
           </div>
 
-          {/* Pending Correction Requests Section */}
-          {pendingRequests.length > 0 && (
-            <Card className="mb-6 border-amber-200 bg-amber-50/50">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-amber-600" />
-                    <CardTitle className="text-amber-900">Pending Attendance Correction Requests</CardTitle>
-                  </div>
-                  <Badge variant="secondary">{pendingRequests.length} pending</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {pendingRequests.map((request) => (
-                    <div key={request.id} className="flex items-center justify-between p-4 border rounded-lg bg-white">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <p className="font-semibold">{request.employeeName}</p>
-                          <Badge variant="outline" className="text-xs">
+          {/* Submitted Correction Requests Table */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>My Submitted Requests</CardTitle>
+              <CardDescription>Attendance correction requests you have submitted for approval</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="border rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-muted border-b">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Request ID</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Employee</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Date Range</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Days</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Submitted</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Status</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y">
+                    {correctionRequests.map((request) => (
+                      <tr key={request.id} className="hover:bg-muted/50">
+                        <td className="px-4 py-3 text-sm">
+                          <Badge variant="outline" className="font-mono">
                             {request.requestId}
                           </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
+                        </td>
+                        <td className="px-4 py-3 text-sm font-medium">{request.employeeName}</td>
+                        <td className="px-4 py-3 text-sm">
                           {format(new Date(request.dateRange.start), "MMM dd")} -{" "}
-                          {format(new Date(request.dateRange.end), "MMM dd, yyyy")}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Requested by: {request.requestedBy.name}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleViewRequest(request)}
-                          className="gap-1 bg-transparent"
-                        >
-                          <Eye className="w-4 h-4" />
-                          View
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleRequestAction(request, "approve")}
-                          className="gap-1 bg-green-50 text-green-600 border-green-200 hover:bg-green-100"
-                        >
-                          <Check className="w-4 h-4" />
-                          Approve
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleRequestAction(request, "reject")}
-                          className="gap-1 bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
-                        >
-                          <X className="w-4 h-4" />
-                          Reject
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
+                          {format(new Date(request.dateRange.end), "MMM dd")}
+                        </td>
+                        <td className="px-4 py-3 text-sm">{request.days} day(s)</td>
+                        <td className="px-4 py-3 text-sm">
+                          {format(new Date(request.submittedDate), "MMM dd, yyyy")}
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          <Badge className={cn("border", getStatusBadgeColor(request.status))}>
+                            {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                          </Badge>
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleViewRequest(request)}
+                            className="gap-1 bg-transparent"
+                          >
+                            <Eye className="w-4 h-4" />
+                            View
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Step 1: Select Department */}
           {step === 1 && (
@@ -711,128 +756,59 @@ function ManagerMarkAttendanceInner() {
           <Dialog open={showRequestDialog} onOpenChange={setShowRequestDialog}>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>Attendance Correction Request</DialogTitle>
+                <DialogTitle>Request Details</DialogTitle>
                 <DialogDescription>
                   {selectedRequest?.requestId} - {selectedRequest?.employeeName}
                 </DialogDescription>
               </DialogHeader>
 
               {selectedRequest && (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {/* Request Info */}
-                  <div className="grid grid-cols-2 gap-4 p-3 bg-muted rounded-lg">
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs text-muted-foreground font-medium">Employee</p>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Employee Name</p>
                       <p className="font-semibold">{selectedRequest.employeeName}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground font-medium">Date Range</p>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Request ID</p>
+                      <p className="font-mono text-sm">{selectedRequest.requestId}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Date Range</p>
                       <p className="font-semibold">
                         {format(new Date(selectedRequest.dateRange.start), "MMM dd")} -{" "}
                         {format(new Date(selectedRequest.dateRange.end), "MMM dd, yyyy")}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground font-medium">Requested By</p>
-                      <p className="font-semibold">{selectedRequest.requestedBy.name}</p>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Submitted Date</p>
+                      <p className="font-semibold">{format(new Date(selectedRequest.submittedDate), "MMM dd, yyyy")}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground font-medium">Status</p>
-                      <Badge variant={selectedRequest.status === "pending" ? "outline" : "default"}>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Days Affected</p>
+                      <p className="font-semibold">{selectedRequest.days} day(s)</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium mb-1">Status</p>
+                      <Badge className={cn("border", getStatusBadgeColor(selectedRequest.status))}>
                         {selectedRequest.status.charAt(0).toUpperCase() + selectedRequest.status.slice(1)}
                       </Badge>
                     </div>
                   </div>
 
-                  {/* Attendance Details */}
-                  <div>
-                    <h4 className="font-semibold mb-3 text-sm">Correction Details</h4>
-                    <div className="space-y-2 max-h-64 overflow-y-auto">
-                      {Object.entries(selectedRequest.attendance).map(([date, data]) => (
-                        <div key={date} className="p-3 border rounded-lg">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-medium text-sm">{format(new Date(date), "EEEE, MMMM dd")}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {data.checkIn} - {data.checkOut}
-                              </p>
-                            </div>
-                            <Badge variant="outline" className="text-xs">
-                              {data.totalHours}
-                            </Badge>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                  {/* Reason */}
+                  <div className="bg-muted p-4 rounded-lg">
+                    <p className="text-xs text-muted-foreground font-medium mb-2">Reason for Correction</p>
+                    <p className="text-sm">{selectedRequest.reason}</p>
                   </div>
-
-                  {/* Action Confirmation */}
-                  {actionType && (
-                    <div
-                      className={cn(
-                        "p-4 rounded-lg border",
-                        actionType === "approve"
-                          ? "bg-green-50 border-green-200"
-                          : "bg-red-50 border-red-200",
-                      )}
-                    >
-                      <p className={cn("font-semibold text-sm", actionType === "approve" ? "text-green-900" : "text-red-900")}>
-                        {actionType === "approve"
-                          ? "Are you sure you want to approve this correction request?"
-                          : "Are you sure you want to reject this correction request?"}
-                      </p>
-                      <p className={cn("text-xs mt-1", actionType === "approve" ? "text-green-700" : "text-red-700")}>
-                        {actionType === "approve"
-                          ? "The employee's attendance will be updated with the corrected times."
-                          : "The manager will be notified about the rejection."}
-                      </p>
-                    </div>
-                  )}
                 </div>
               )}
 
               <DialogFooter>
-                {!actionType ? (
-                  <>
-                    <Button variant="outline" onClick={() => setShowRequestDialog(false)}>
-                      Close
-                    </Button>
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() => handleRequestAction(selectedRequest!, "approve")}
-                        className="gap-2 bg-green-600 hover:bg-green-700"
-                      >
-                        <Check className="w-4 h-4" />
-                        Approve
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={() => handleRequestAction(selectedRequest!, "reject")}
-                        className="gap-2"
-                      >
-                        <X className="w-4 h-4" />
-                        Reject
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setActionType(null)
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={confirmRequestAction}
-                      className={actionType === "approve" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}
-                    >
-                      {actionType === "approve" ? "Confirm Approval" : "Confirm Rejection"}
-                    </Button>
-                  </>
-                )}
+                <Button variant="outline" onClick={() => setShowRequestDialog(false)}>
+                  Close
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
