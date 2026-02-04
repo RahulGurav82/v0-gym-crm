@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -157,6 +158,7 @@ type SortField = "rating" | "monthlyRating" | "reviews" | "clients" | "name"
 type SortOrder = "asc" | "desc"
 
 export function TrainerRankingTable() {
+  const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedBranch, setSelectedBranch] = useState("all")
   const [sortField, setSortField] = useState<SortField>("rating")
@@ -394,9 +396,9 @@ export function TrainerRankingTable() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => router.push(`/admin/trainers/${trainer.id}`)}>
                               <Eye className="w-4 h-4 mr-2" />
-                              View Profile
+                              View Clients
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <Edit className="w-4 h-4 mr-2" />
