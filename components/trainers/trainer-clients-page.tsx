@@ -164,41 +164,39 @@ export function TrainerClientsPage({ trainerId, trainerName }: TrainerClientsPag
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {clients.map((client) => (
-              <Card key={client.id} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
+              <Card key={client.id} className="hover:shadow-md transition-shadow hover:scale-105 duration-200">
+                <CardContent className="p-3">
                   {/* Client Info */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3 flex-1">
-                      <Avatar className="w-12 h-12">
-                        <AvatarImage src={client.avatar || "/placeholder.svg"} />
-                        <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <p className="font-semibold text-sm">{client.name}</p>
-                        <p className="text-xs text-muted-foreground">Client</p>
-                      </div>
-                    </div>
+                  <div className="flex flex-col items-center text-center mb-3">
+                    <Avatar className="w-10 h-10 mb-2">
+                      <AvatarImage src={client.avatar || "/placeholder.svg"} />
+                      <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <p className="font-medium text-xs line-clamp-2">{client.name}</p>
                     <Badge
-                      className={client.status === "Active" ? "bg-green-500/10 text-green-600" : "bg-red-500/10 text-red-600"}
+                      className={cn(
+                        "text-xs mt-1",
+                        client.status === "Active" ? "bg-green-500/10 text-green-600" : "bg-red-500/10 text-red-600",
+                      )}
                     >
                       {client.status}
                     </Badge>
                   </div>
 
-                  {/* Rating Stats */}
-                  <div className="space-y-3 mb-6">
+                  {/* Rating Stats - Compact */}
+                  <div className="space-y-2 mb-3">
                     {/* Average Rating */}
-                    <div className="bg-muted rounded-lg p-3">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-medium text-muted-foreground">Average Rating</span>
-                        <div className="flex items-center gap-1">
-                          <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-                          <span className="text-sm font-semibold">{client.averageRating.toFixed(2)}</span>
+                    <div className="bg-muted rounded p-2">
+                      <div className="flex items-center justify-between gap-1 mb-1">
+                        <span className="text-xs font-medium text-muted-foreground">Rating</span>
+                        <div className="flex items-center gap-0.5">
+                          <Star className="w-2.5 h-2.5 fill-yellow-500 text-yellow-500" />
+                          <span className="text-xs font-semibold">{client.averageRating.toFixed(1)}</span>
                         </div>
                       </div>
-                      <div className="w-full bg-background rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-background rounded-full h-1.5 overflow-hidden">
                         <div
                           className="bg-yellow-500 h-full rounded-full"
                           style={{ width: `${(client.averageRating / 5) * 100}%` }}
@@ -207,31 +205,27 @@ export function TrainerClientsPage({ trainerId, trainerName }: TrainerClientsPag
                     </div>
 
                     {/* Total Rating */}
-                    <div className="bg-muted rounded-lg p-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium text-muted-foreground">Total Rating</span>
-                        <Badge variant="outline" className={getRatingColor(client.averageRating)}>
-                          {client.totalRating.toFixed(1)} pts
-                        </Badge>
-                      </div>
+                    <div className="flex items-center justify-between text-xs bg-muted rounded p-2">
+                      <span className="font-medium text-muted-foreground">Total</span>
+                      <Badge variant="outline" className={cn("text-xs", getRatingColor(client.averageRating))}>
+                        {client.totalRating.toFixed(1)}
+                      </Badge>
                     </div>
 
                     {/* Reviews Count */}
-                    <div className="bg-muted rounded-lg p-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <MessageCircle className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-xs font-medium text-muted-foreground">Total Reviews</span>
-                        </div>
-                        <span className="text-sm font-semibold">{client.totalReviews}</span>
+                    <div className="flex items-center justify-between text-xs bg-muted rounded p-2">
+                      <div className="flex items-center gap-1">
+                        <MessageCircle className="w-3 h-3 text-muted-foreground" />
+                        <span className="font-medium text-muted-foreground">Reviews</span>
                       </div>
+                      <span className="font-semibold">{client.totalReviews}</span>
                     </div>
                   </div>
 
                   {/* View Session Button */}
-                  <Button className="w-full" size="sm">
-                    <Eye className="w-4 h-4 mr-2" />
-                    View Sessions
+                  <Button className="w-full text-xs h-7" size="sm">
+                    <Eye className="w-3 h-3 mr-1" />
+                    View
                   </Button>
                 </CardContent>
               </Card>
