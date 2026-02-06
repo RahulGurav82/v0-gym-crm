@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
 /* Updated theme to use brand orange (#ed9320) as primary color */
 :root {
   /* Light theme with white background and brand orange */

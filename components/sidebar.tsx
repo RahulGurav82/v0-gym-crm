@@ -43,7 +43,8 @@ import {
   Menu,
   X,
   Target,
-  Award, // Import Award icon
+  Award,
+  RotateCw,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -194,6 +195,12 @@ const crmNavItems: NavItem[] = [
     title: "Invoices",
     href: "/admin/invoices",
     icon: Receipt,
+    roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Renewals",
+    href: "/admin/renewals",
+    icon: RotateCw,
     roles: ["admin", "head", "manager"],
   },
   {
