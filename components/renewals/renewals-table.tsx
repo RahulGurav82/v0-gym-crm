@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog" // test
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Search,
   Filter,
@@ -15,6 +17,7 @@ import {
   Phone,
   Mail,
   Calendar,
+  CheckCircle2,
 } from "lucide-react"
 
 interface Renewal {
@@ -117,6 +120,9 @@ export function RenewalsTable() {
   const [filterType, setFilterType] = useState("all")
   const [filterStatus, setFilterStatus] = useState("all")
   const [filterBranch, setFilterBranch] = useState("all")
+  const [showRenewalDialog, setShowRenewalDialog] = useState(false)
+  const [selectedMember, setSelectedMember] = useState<Renewal | null>(null)
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([])
 
   // Get unique branches for filter
   const branches = Array.from(new Set(mockRenewals.map((r) => r.branchName)))
@@ -161,6 +167,31 @@ export function RenewalsTable() {
       default:
         return <Badge variant="outline">{type}</Badge>
     }
+  }
+
+  const handleOpenRenewalDialog = (renewal: Renewal) => {
+    setSelectedMember(renewal)
+    setSelectedProducts([renewal.id])
+    setShowRenewalDialog(true)
+  }
+
+  const handleCloseRenewalDialog = () => {
+    setShowRenewalDialog(false)
+    setSelectedMember(null)
+    setSelectedProducts([])
+  }
+
+  const handleToggleProduct = (productId: string) => {
+    setSelectedProducts((prev) =>
+      prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]
+    )
+  }
+
+  const handleRenew = () => {
+    if (selectedProducts.length === 0) return
+    console.log("[v0] Renewing products:", selectedProducts)
+    // TODO: Implement renewal logic
+    handleCloseRenewalDialog()
   }
 
   return (
@@ -307,7 +338,7 @@ export function RenewalsTable() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Renew</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleOpenRenewalDialog(renewal)}>Renew</DropdownMenuItem>
                           <DropdownMenuItem>Send Reminder</DropdownMenuItem>
                           <DropdownMenuItem className="text-destructive">Cancel</DropdownMenuItem>
                         </DropdownMenuContent>
@@ -320,6 +351,97 @@ export function RenewalsTable() {
           </div>
         )}
       </CardContent>
+
+      {/* Renewal Dialog */}
+      <Dialog open={showRenewalDialog} onOpenChange={setShowRenewalDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Renew Service</DialogTitle>
+            <DialogDescription asChild>
+              {selectedMember && (
+                <div className="mt-2 space-y-1 text-sm">
+                  <div className="font-medium text-foreground">{selectedMember.memberName}</div>
+                  <div className="text-muted-foreground flex items-center gap-1">
+                    <Phone className="w-3 h-3" />
+                    {selectedMember.memberPhone}
+                  </div>
+                  <div className="text-muted-foreground">
+                    Branch: {selectedMember.branchName}
+                  </div>
+                </div>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedMember && (
+            <div className="space-y-4 py-4">
+              {/* Products Section */}
+              <div className="space-y-3">
+                <h3 className="font-medium text-sm">Select Products to Renew</h3>
+                
+                {/* Product Card */}
+                <div 
+                  key={selectedMember.id}
+                  className="border rounded-lg p-3 space-y-2 cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => handleToggleProduct(selectedMember.id)}
+                >
+                  <div className="flex items-start gap-3">
+                    <Checkbox 
+                      checked={selectedProducts.includes(selectedMember.id)}
+                      onCheckedChange={() => handleToggleProduct(selectedMember.id)}
+                      className="mt-1"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="font-medium text-sm">{selectedMember.name}</div>
+                        {getTypeBadge(selectedMember.type)}
+                      </div>
+                      <div className="space-y-1 text-xs text-muted-foreground">
+                        <div>Status: <span className="text-foreground font-medium">{selectedMember.status}</span></div>
+                        <div>End Date: {new Date(selectedMember.endDate).toLocaleDateString()}</div>
+                        {selectedMember.remainingSlots !== null && (
+                          <div>Remaining Slots: <span className="text-foreground font-medium">{selectedMember.remainingSlots}</span></div>
+                        )}
+                        {selectedMember.amount && (
+                          <div>Amount: <span className="text-foreground font-medium">₹{selectedMember.amount.toFixed(2)}</span></div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Summary */}
+              <div className="border-t pt-3 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Selected Products:</span>
+                  <span className="font-medium">{selectedProducts.length}</span>
+                </div>
+                {selectedMember.amount && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Total Amount:</span>
+                    <span className="font-semibold">₹{selectedMember.amount.toFixed(2)}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={handleCloseRenewalDialog}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleRenew} 
+              disabled={selectedProducts.length === 0}
+              className="gap-2"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              Renew Now
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   )
 }

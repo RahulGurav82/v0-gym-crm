@@ -45,6 +45,7 @@ import {
   Target,
   Award,
   RotateCw,
+  Trash2,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -196,6 +197,12 @@ const crmNavItems: NavItem[] = [
     href: "/admin/invoices",
     icon: Receipt,
     roles: ["admin", "head", "manager"],
+  },
+  {
+    title: "Deleted Bills",
+    href: "/admin/deleted-bills",
+    icon: Trash2,
+    roles: ["admin", "head"],
   },
   {
     title: "Renewals",
