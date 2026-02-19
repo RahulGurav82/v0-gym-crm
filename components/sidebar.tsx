@@ -46,6 +46,7 @@ import {
   Award,
   RotateCw,
   Trash2,
+  TrendingUp,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -203,6 +204,12 @@ const crmNavItems: NavItem[] = [
     href: "/admin/deleted-bills",
     icon: Trash2,
     roles: ["admin", "head"],
+  },
+  {
+    title: "Followups Reports",
+    href: "/admin/followups-reports",
+    icon: TrendingUp,
+    roles: ["admin", "head", "manager"],
   },
   {
     title: "Renewals",
