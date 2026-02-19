@@ -243,12 +243,16 @@ export function FollowupsReportsTable() {
       {/* Details Dialog */}
       {selectedEmployee && (
         <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
-          <DialogContent className="max-w-4xl">
-            <DialogHeader>
-              <DialogTitle>{selectedEmployee.name} - Followups Report</DialogTitle>
-              <DialogDescription>{selectedEmployee.email}</DialogDescription>
+          <DialogContent className="max-w-7xl w-11/12 max-h-[90vh]">
+            <DialogHeader className="pb-4 border-b">
+              <div className="space-y-1">
+                <DialogTitle className="text-2xl">{selectedEmployee.name} - Followups Report</DialogTitle>
+                <DialogDescription className="text-sm">{selectedEmployee.email}</DialogDescription>
+              </div>
             </DialogHeader>
-            <FollowupsReportsDetails employee={selectedEmployee} />
+            <div className="overflow-y-auto max-h-[calc(90vh-120px)]">
+              <FollowupsReportsDetails employee={selectedEmployee} />
+            </div>
           </DialogContent>
         </Dialog>
       )}

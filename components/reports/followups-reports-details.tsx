@@ -50,12 +50,15 @@ export function FollowupsReportsDetails({ employee }: FollowupsReportsDetailsPro
   ]
 
   return (
-    <div className="space-y-4">
-      {/* Month Filter */}
-      <div className="flex items-center gap-4">
-        <Calendar className="h-5 w-5 text-muted-foreground" />
+    <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+      {/* Header with Month Filter */}
+      <div className="flex items-center justify-between bg-gradient-to-r from-muted/50 to-transparent rounded-lg p-4 border">
+        <div className="flex items-center gap-3">
+          <Calendar className="h-5 w-5 text-muted-foreground" />
+          <span className="font-medium">Filter by Month:</span>
+        </div>
         <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-          <SelectTrigger className="w-48">
+          <SelectTrigger className="w-56">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -68,62 +71,71 @@ export function FollowupsReportsDetails({ employee }: FollowupsReportsDetailsPro
         </Select>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Card>
+      {/* Stats Cards - Horizontal Layout */}
+      <div className="grid grid-cols-5 gap-3">
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-50/50 dark:from-blue-500/10 dark:to-blue-500/5 border-blue-200/50 dark:border-blue-500/20">
           <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">{employee.totalFollowups}</div>
-              <div className="text-sm text-muted-foreground mt-2">Total Followups</div>
+            <div className="text-center space-y-1">
+              <div className="text-4xl font-bold text-blue-600">{employee.totalFollowups}</div>
+              <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Total</div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-green-50 to-green-50/50 dark:from-green-500/10 dark:to-green-500/5 border-green-200/50 dark:border-green-500/20">
           <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">{employee.completed}</div>
-              <div className="text-sm text-muted-foreground mt-2">Completed</div>
+            <div className="text-center space-y-1">
+              <div className="text-4xl font-bold text-green-600">{employee.completed}</div>
+              <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Completed</div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-50/50 dark:from-blue-500/10 dark:to-blue-500/5 border-blue-200/50 dark:border-blue-500/20">
           <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-600">{employee.pending}</div>
-              <div className="text-sm text-muted-foreground mt-2">Pending</div>
+            <div className="text-center space-y-1">
+              <div className="text-4xl font-bold text-blue-600">{employee.pending}</div>
+              <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Pending</div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-50/50 dark:from-yellow-500/10 dark:to-yellow-500/5 border-yellow-200/50 dark:border-yellow-500/20">
           <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-red-600">{employee.overdue}</div>
-              <div className="text-sm text-muted-foreground mt-2">Overdue</div>
+            <div className="text-center space-y-1">
+              <div className="text-4xl font-bold text-yellow-600">{employee.rescheduled}</div>
+              <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Rescheduled</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-red-50 to-red-50/50 dark:from-red-500/10 dark:to-red-500/5 border-red-200/50 dark:border-red-500/20">
+          <CardContent className="pt-6">
+            <div className="text-center space-y-1">
+              <div className="text-4xl font-bold text-red-600">{employee.overdue}</div>
+              <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Overdue</div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {/* Top Row Charts - 2 Columns */}
+      <div className="grid grid-cols-2 gap-4">
         {/* Monthly Trends */}
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-3">
             <CardTitle className="text-base">Monthly Trends</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={280}>
               <LineChart data={monthlyData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--muted-foreground)" />
-                <XAxis dataKey="month" stroke="var(--muted-foreground)" />
-                <YAxis stroke="var(--muted-foreground)" />
+                <XAxis dataKey="month" stroke="var(--muted-foreground)" fontSize={12} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={12} />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="total" stroke="#3b82f6" name="Total" />
-                <Line type="monotone" dataKey="completed" stroke="#22c55e" name="Completed" />
+                <Line type="monotone" dataKey="total" stroke="#3b82f6" name="Total" strokeWidth={2} dot={{ r: 4 }} />
+                <Line type="monotone" dataKey="completed" stroke="#22c55e" name="Completed" strokeWidth={2} dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -131,13 +143,22 @@ export function FollowupsReportsDetails({ employee }: FollowupsReportsDetailsPro
 
         {/* Status Distribution */}
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-3">
             <CardTitle className="text-base">Status Distribution</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+          <CardContent className="flex items-center justify-center">
+            <ResponsiveContainer width="100%" height={280}>
               <PieChart>
-                <Pie data={statusData} cx="50%" cy="50%" labelLine={false} label={({ name, value }) => `${name}: ${value}`} outerRadius={80} fill="#8884d8" dataKey="value">
+                <Pie
+                  data={statusData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, value }) => `${name}: ${value}`}
+                  outerRadius={90}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
                   {statusData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
@@ -147,18 +168,21 @@ export function FollowupsReportsDetails({ employee }: FollowupsReportsDetailsPro
             </ResponsiveContainer>
           </CardContent>
         </Card>
+      </div>
 
+      {/* Bottom Row - Status Breakdown and Completion Rate */}
+      <div className="grid grid-cols-2 gap-4">
         {/* Status Breakdown */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Status Breakdown</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Status Breakdown by Month</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={280}>
               <BarChart data={monthlyData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--muted-foreground)" />
-                <XAxis dataKey="month" stroke="var(--muted-foreground)" />
-                <YAxis stroke="var(--muted-foreground)" />
+                <XAxis dataKey="month" stroke="var(--muted-foreground)" fontSize={12} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={12} />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="completed" stackId="a" fill="#22c55e" name="Completed" />
@@ -170,63 +194,30 @@ export function FollowupsReportsDetails({ employee }: FollowupsReportsDetailsPro
           </CardContent>
         </Card>
 
-        {/* Completion Rate */}
+        {/* Completion Metrics */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Completion Rate</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Performance Metrics</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-3">
-              {[
-                { label: "Completed Rate", value: Math.round((employee.completed / employee.totalFollowups) * 100), color: "bg-green-500" },
-                { label: "Pending Rate", value: Math.round((employee.pending / employee.totalFollowups) * 100), color: "bg-blue-500" },
-                { label: "Overdue Rate", value: Math.round((employee.overdue / employee.totalFollowups) * 100), color: "bg-red-500" },
-              ].map((item) => (
-                <div key={item.label} className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{item.label}</span>
-                    <span className="font-semibold">{item.value}%</span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-                    <div className={`${item.color} h-full rounded-full transition-all`} style={{ width: `${item.value}%` }} />
-                  </div>
+          <CardContent className="space-y-5">
+            {[
+              { label: "Completion Rate", value: Math.round((employee.completed / employee.totalFollowups) * 100), color: "bg-green-500" },
+              { label: "Pending Rate", value: Math.round((employee.pending / employee.totalFollowups) * 100), color: "bg-blue-500" },
+              { label: "Overdue Rate", value: Math.round((employee.overdue / employee.totalFollowups) * 100), color: "bg-red-500" },
+            ].map((item) => (
+              <div key={item.label} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-muted-foreground">{item.label}</span>
+                  <span className="text-lg font-bold">{item.value}%</span>
                 </div>
-              ))}
-            </div>
+                <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
+                  <div className={`${item.color} h-full rounded-full transition-all duration-500`} style={{ width: `${item.value}%` }} />
+                </div>
+              </div>
+            ))}
           </CardContent>
         </Card>
       </div>
-
-      {/* Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2 text-sm">
-            <p>
-              <span className="text-muted-foreground">Total Followups:</span>
-              <span className="font-semibold float-right">{employee.totalFollowups}</span>
-            </p>
-            <p>
-              <span className="text-muted-foreground">Completed:</span>
-              <span className="font-semibold float-right text-green-600">{employee.completed} ({Math.round((employee.completed / employee.totalFollowups) * 100)}%)</span>
-            </p>
-            <p>
-              <span className="text-muted-foreground">Pending:</span>
-              <span className="font-semibold float-right text-blue-600">{employee.pending}</span>
-            </p>
-            <p>
-              <span className="text-muted-foreground">Rescheduled:</span>
-              <span className="font-semibold float-right text-yellow-600">{employee.rescheduled}</span>
-            </p>
-            <p>
-              <span className="text-muted-foreground">Overdue:</span>
-              <span className="font-semibold float-right text-red-600">{employee.overdue}</span>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }
