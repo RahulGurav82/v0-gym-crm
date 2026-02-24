@@ -115,7 +115,6 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
               <TableHead className="w-20 text-center text-xs font-semibold text-gray-700">No.</TableHead>
               <TableHead className="text-xs font-semibold text-gray-700 min-w-40">Employee</TableHead>
 
-              {/* Hours Section */}
               <TableHead colSpan={2} className="text-center text-xs font-semibold text-gray-700 border-l">
                 Hours
               </TableHead>
@@ -135,7 +134,6 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
               <TableHead className="text-xs font-semibold text-gray-700 text-center min-w-28">Actions</TableHead>
             </TableRow>
 
-            {/* Sub-headers */}
             <TableRow className="border-t bg-gray-50">
               <TableHead colSpan={2}></TableHead>
               <TableHead className="text-xs font-semibold text-gray-600 border-l">Reg</TableHead>
@@ -154,30 +152,18 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
               <TableRow key={row.id} className="border-b hover:bg-gray-50">
                 <TableCell className="text-center text-sm font-medium text-gray-700">{index + 1}</TableCell>
                 <TableCell className="text-sm font-medium text-gray-900">{row.employeeName}</TableCell>
-
-                {/* Hours */}
                 <TableCell className="text-center text-sm text-gray-600 border-l">{row.regularHours}</TableCell>
                 <TableCell className="text-center text-sm text-gray-600">{row.otHours}</TableCell>
-
-                {/* Rates */}
                 <TableCell className="text-right text-sm text-gray-600 border-l">₹{row.hourlyRate}</TableCell>
                 <TableCell className="text-right text-sm text-gray-600">₹{row.otRate}</TableCell>
-
-                {/* Allowances */}
                 <TableCell className="text-right text-sm text-gray-600">₹{row.paidLeavePay}</TableCell>
                 <TableCell className="text-right text-sm text-gray-600">₹{row.bonusPay}</TableCell>
-
-                {/* Income Tax Deductions */}
                 <TableCell className="text-right text-sm text-gray-600 border-l">₹{row.professionalTax}</TableCell>
                 <TableCell className="text-right text-sm text-gray-600">₹{row.incomeTax}</TableCell>
                 <TableCell className="text-right text-sm text-gray-600">₹{row.epf}</TableCell>
                 <TableCell className="text-right text-sm text-gray-600">₹{row.esi}</TableCell>
-
-                {/* Other & Net */}
                 <TableCell className="text-right text-sm text-gray-600 border-l">₹{row.otherDeduct}</TableCell>
                 <TableCell className="text-right text-sm font-semibold text-gray-900">₹{row.netPay}</TableCell>
-
-                {/* Actions */}
                 <TableCell className="text-center border-l">
                   <div className="flex gap-1 justify-center">
                     <Button
@@ -198,35 +184,24 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
               </TableRow>
             ))}
 
-            {/* Totals Row */}
             <TableRow className="bg-gray-100 font-bold border-t-2 border-gray-300">
               <TableCell colSpan={2} className="text-sm font-bold text-gray-900">
                 TOTAL
               </TableCell>
-
-              {/* Totals - Hours */}
               <TableCell className="text-center text-sm font-bold text-gray-900 border-l">
                 {totals.regularHours}
               </TableCell>
               <TableCell className="text-center text-sm font-bold text-gray-900">{totals.otHours}</TableCell>
-
-              {/* Totals - Rates (not summed) */}
               <TableCell className="text-center text-sm text-gray-600 border-l">-</TableCell>
               <TableCell className="text-center text-sm text-gray-600">-</TableCell>
-
-              {/* Totals - Allowances */}
               <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.paidLeavePay}</TableCell>
               <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.bonusPay}</TableCell>
-
-              {/* Totals - Deductions */}
               <TableCell className="text-right text-sm font-bold text-gray-900 border-l">
                 ₹{totals.professionalTax}
               </TableCell>
               <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.incomeTax}</TableCell>
               <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.epf}</TableCell>
               <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.esi}</TableCell>
-
-              {/* Totals - Other & Net */}
               <TableCell className="text-right text-sm font-bold text-gray-900 border-l">
                 ₹{totals.otherDeduct}
               </TableCell>
@@ -237,7 +212,6 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
         </Table>
       </div>
 
-      {/* Details Dialog */}
       {selectedEmployee && (
         <Dialog open={showDetails} onOpenChange={setShowDetails}>
           <DialogContent className="max-w-2xl">

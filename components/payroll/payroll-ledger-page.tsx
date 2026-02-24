@@ -17,7 +17,6 @@ export function PayrollLedgerPage() {
   const departments = ['HR', 'Operations', 'Finance', 'Marketing', 'IT']
 
   const handleExport = () => {
-    // TODO: Implement export functionality
     console.log('Export payroll ledger')
   }
 
@@ -28,16 +27,13 @@ export function PayrollLedgerPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-full">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Payroll Ledger</h1>
           <p className="text-gray-600 mt-1">Manage and review employee payroll information</p>
         </div>
 
-        {/* Filters Card */}
         <Card className="mb-6 p-6 bg-white border">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* Branch */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Select Branch</label>
               <Select value={selectedBranch} onValueChange={setSelectedBranch}>
@@ -55,7 +51,6 @@ export function PayrollLedgerPage() {
               </Select>
             </div>
 
-            {/* Department */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Select Department</label>
               <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
@@ -73,29 +68,16 @@ export function PayrollLedgerPage() {
               </Select>
             </div>
 
-            {/* Start Date */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Pay Start Date</label>
-              <Input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="h-10"
-              />
+              <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="h-10" />
             </div>
 
-            {/* End Date */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Pay End Date</label>
-              <Input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="h-10"
-              />
+              <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="h-10" />
             </div>
 
-            {/* Actions */}
             <div className="flex flex-col gap-2 justify-end">
               <Button variant="outline" onClick={handlePrint} className="h-10">
                 Print
@@ -107,7 +89,6 @@ export function PayrollLedgerPage() {
           </div>
         </Card>
 
-        {/* Table */}
         <Card className="bg-white border">
           <PayrollLedgerTable />
         </Card>
