@@ -31,7 +31,6 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
   const [selectedEmployee, setSelectedEmployee] = useState<PayrollRow | null>(null)
   const [showDetails, setShowDetails] = useState(false)
 
-  // Mock data if not provided
   const mockData: PayrollRow[] = [
     {
       id: '1',
@@ -85,12 +84,9 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
 
   const displayData = data || mockData
 
-  // Calculate totals
   const totals = {
     regularHours: displayData.reduce((sum, row) => sum + row.regularHours, 0),
     otHours: displayData.reduce((sum, row) => sum + row.otHours, 0),
-    hourlyRate: displayData.reduce((sum, row) => sum + row.hourlyRate, 0),
-    otRate: displayData.reduce((sum, row) => sum + row.otRate, 0),
     paidLeavePay: displayData.reduce((sum, row) => sum + row.paidLeavePay, 0),
     bonusPay: displayData.reduce((sum, row) => sum + row.bonusPay, 0),
     professionalTax: displayData.reduce((sum, row) => sum + row.professionalTax, 0),
@@ -112,98 +108,74 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
         <Table className="w-full">
           <TableHeader className="bg-gray-50 border-b">
             <TableRow>
-              <TableHead className="w-20 text-center text-xs font-semibold text-gray-700">No.</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-700 min-w-40">Employee</TableHead>
-
-              <TableHead colSpan={2} className="text-center text-xs font-semibold text-gray-700 border-l">
-                Hours
-              </TableHead>
-
-              <TableHead className="text-xs font-semibold text-gray-700 border-l">Hourly Rate</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-700">OT Rate</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-700">Paid Leave Pay</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-700">Bonus Pay</TableHead>
-              <TableHead colSpan={4} className="text-center text-xs font-semibold text-gray-700 border-l">
-                Income Tax Deductions
-              </TableHead>
-
-              <TableHead className="text-xs font-semibold text-gray-700 border-l">Other Deduct</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-700">Net Pay</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-700 text-center min-w-28">Actions</TableHead>
+              <TableHead className="w-12 text-center text-xs font-semibold">No.</TableHead>
+              <TableHead className="text-xs font-semibold min-w-40">Employee</TableHead>
+              <TableHead colSpan={2} className="text-center text-xs font-semibold border-l">Hours</TableHead>
+              <TableHead className="text-xs font-semibold border-l">Hourly Rate</TableHead>
+              <TableHead className="text-xs font-semibold">OT Rate</TableHead>
+              <TableHead className="text-xs font-semibold">Paid Leave</TableHead>
+              <TableHead className="text-xs font-semibold">Bonus</TableHead>
+              <TableHead colSpan={4} className="text-center text-xs font-semibold border-l">Deductions</TableHead>
+              <TableHead className="text-xs font-semibold border-l">Other Ded</TableHead>
+              <TableHead className="text-xs font-semibold">Net Pay</TableHead>
+              <TableHead className="text-xs font-semibold text-center w-24">Actions</TableHead>
             </TableRow>
-
             <TableRow className="border-t bg-gray-50">
               <TableHead colSpan={2}></TableHead>
-              <TableHead className="text-xs font-semibold text-gray-600 border-l">Reg</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-600">OT</TableHead>
+              <TableHead className="text-xs font-semibold border-l text-center">Reg</TableHead>
+              <TableHead className="text-xs font-semibold text-center">OT</TableHead>
               <TableHead colSpan={4}></TableHead>
-              <TableHead className="text-xs font-semibold text-gray-600 border-l">Prof Tax</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-600">Income Tax</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-600">EPF</TableHead>
-              <TableHead className="text-xs font-semibold text-gray-600">ESI</TableHead>
+              <TableHead className="text-xs font-semibold border-l text-center">P Tax</TableHead>
+              <TableHead className="text-xs font-semibold text-center">TDS</TableHead>
+              <TableHead className="text-xs font-semibold text-center">EPF</TableHead>
+              <TableHead className="text-xs font-semibold text-center">ESI</TableHead>
               <TableHead colSpan={3}></TableHead>
             </TableRow>
           </TableHeader>
-
           <TableBody>
             {displayData.map((row, index) => (
               <TableRow key={row.id} className="border-b hover:bg-gray-50">
-                <TableCell className="text-center text-sm font-medium text-gray-700">{index + 1}</TableCell>
-                <TableCell className="text-sm font-medium text-gray-900">{row.employeeName}</TableCell>
-                <TableCell className="text-center text-sm text-gray-600 border-l">{row.regularHours}</TableCell>
-                <TableCell className="text-center text-sm text-gray-600">{row.otHours}</TableCell>
-                <TableCell className="text-right text-sm text-gray-600 border-l">₹{row.hourlyRate}</TableCell>
-                <TableCell className="text-right text-sm text-gray-600">₹{row.otRate}</TableCell>
-                <TableCell className="text-right text-sm text-gray-600">₹{row.paidLeavePay}</TableCell>
-                <TableCell className="text-right text-sm text-gray-600">₹{row.bonusPay}</TableCell>
-                <TableCell className="text-right text-sm text-gray-600 border-l">₹{row.professionalTax}</TableCell>
-                <TableCell className="text-right text-sm text-gray-600">₹{row.incomeTax}</TableCell>
-                <TableCell className="text-right text-sm text-gray-600">₹{row.epf}</TableCell>
-                <TableCell className="text-right text-sm text-gray-600">₹{row.esi}</TableCell>
-                <TableCell className="text-right text-sm text-gray-600 border-l">₹{row.otherDeduct}</TableCell>
-                <TableCell className="text-right text-sm font-semibold text-gray-900">₹{row.netPay}</TableCell>
+                <TableCell className="text-center text-sm font-medium">{index + 1}</TableCell>
+                <TableCell className="text-sm font-medium">{row.employeeName}</TableCell>
+                <TableCell className="text-center text-sm border-l">{row.regularHours}</TableCell>
+                <TableCell className="text-center text-sm">{row.otHours}</TableCell>
+                <TableCell className="text-right text-sm border-l">₹{row.hourlyRate}</TableCell>
+                <TableCell className="text-right text-sm">₹{row.otRate}</TableCell>
+                <TableCell className="text-right text-sm">₹{row.paidLeavePay}</TableCell>
+                <TableCell className="text-right text-sm">₹{row.bonusPay}</TableCell>
+                <TableCell className="text-right text-sm border-l">₹{row.professionalTax}</TableCell>
+                <TableCell className="text-right text-sm">₹{row.incomeTax}</TableCell>
+                <TableCell className="text-right text-sm">₹{row.epf}</TableCell>
+                <TableCell className="text-right text-sm">₹{row.esi}</TableCell>
+                <TableCell className="text-right text-sm border-l">₹{row.otherDeduct}</TableCell>
+                <TableCell className="text-right text-sm font-semibold">₹{row.netPay}</TableCell>
                 <TableCell className="text-center border-l">
                   <div className="flex gap-1 justify-center">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-8 w-8 p-0"
-                      onClick={() => handleView(row)}
-                      title="View Details"
-                    >
-                      <Eye className="h-4 w-4" />
+                    <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => handleView(row)}>
+                      <Eye className="h-3 w-3" />
                     </Button>
-                    <Button size="sm" className="h-8 px-2 bg-blue-600 hover:bg-blue-700" title="Pay">
-                      <DollarSign className="h-4 w-4 mr-1" />
+                    <Button size="sm" className="h-7 px-2 bg-blue-600 hover:bg-blue-700 text-white">
+                      <DollarSign className="h-3 w-3 mr-1" />
                       Pay
                     </Button>
                   </div>
                 </TableCell>
               </TableRow>
             ))}
-
-            <TableRow className="bg-gray-100 font-bold border-t-2 border-gray-300">
-              <TableCell colSpan={2} className="text-sm font-bold text-gray-900">
-                TOTAL
-              </TableCell>
-              <TableCell className="text-center text-sm font-bold text-gray-900 border-l">
-                {totals.regularHours}
-              </TableCell>
-              <TableCell className="text-center text-sm font-bold text-gray-900">{totals.otHours}</TableCell>
-              <TableCell className="text-center text-sm text-gray-600 border-l">-</TableCell>
-              <TableCell className="text-center text-sm text-gray-600">-</TableCell>
-              <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.paidLeavePay}</TableCell>
-              <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.bonusPay}</TableCell>
-              <TableCell className="text-right text-sm font-bold text-gray-900 border-l">
-                ₹{totals.professionalTax}
-              </TableCell>
-              <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.incomeTax}</TableCell>
-              <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.epf}</TableCell>
-              <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.esi}</TableCell>
-              <TableCell className="text-right text-sm font-bold text-gray-900 border-l">
-                ₹{totals.otherDeduct}
-              </TableCell>
-              <TableCell className="text-right text-sm font-bold text-gray-900">₹{totals.netPay}</TableCell>
+            <TableRow className="bg-gray-100 border-t-2 border-gray-300">
+              <TableCell colSpan={2} className="text-sm font-bold">TOTAL</TableCell>
+              <TableCell className="text-center text-sm font-bold border-l">{totals.regularHours}</TableCell>
+              <TableCell className="text-center text-sm font-bold">{totals.otHours}</TableCell>
+              <TableCell className="text-center text-sm border-l">-</TableCell>
+              <TableCell className="text-center text-sm">-</TableCell>
+              <TableCell className="text-right text-sm font-bold">₹{totals.paidLeavePay}</TableCell>
+              <TableCell className="text-right text-sm font-bold">₹{totals.bonusPay}</TableCell>
+              <TableCell className="text-right text-sm font-bold border-l">₹{totals.professionalTax}</TableCell>
+              <TableCell className="text-right text-sm font-bold">₹{totals.incomeTax}</TableCell>
+              <TableCell className="text-right text-sm font-bold">₹{totals.epf}</TableCell>
+              <TableCell className="text-right text-sm font-bold">₹{totals.esi}</TableCell>
+              <TableCell className="text-right text-sm font-bold border-l">₹{totals.otherDeduct}</TableCell>
+              <TableCell className="text-right text-sm font-bold">₹{totals.netPay}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableBody>
@@ -217,7 +189,6 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
               <DialogTitle>{selectedEmployee.employeeName} - Payroll Details</DialogTitle>
               <DialogDescription>Detailed payroll information</DialogDescription>
             </DialogHeader>
-
             <div className="grid grid-cols-2 gap-6 py-4">
               <div className="space-y-3">
                 <div>
@@ -237,7 +208,6 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
                   <p className="text-lg font-semibold">₹{selectedEmployee.otRate}</p>
                 </div>
               </div>
-
               <div className="space-y-3">
                 <div>
                   <p className="text-xs text-gray-500 uppercase">Paid Leave Pay</p>
@@ -253,7 +223,6 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
                 </div>
               </div>
             </div>
-
             <div className="border-t pt-4">
               <h4 className="font-semibold text-sm mb-3">Deductions</h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
