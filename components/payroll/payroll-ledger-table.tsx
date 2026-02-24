@@ -82,7 +82,7 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
     },
   ]
 
-  const displayData = data || mockData
+  const displayData = data && data.length > 0 ? data : mockData
 
   const totals = {
     regularHours: displayData.reduce((sum, row) => sum + row.regularHours, 0),
