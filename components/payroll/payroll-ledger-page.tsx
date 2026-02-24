@@ -8,8 +8,8 @@ import { Card } from '@/components/ui/card'
 import { PayrollLedgerTable } from './payroll-ledger-table'
 
 export function PayrollLedgerPage() {
-  const [selectedBranch, setSelectedBranch] = useState('')
-  const [selectedDepartment, setSelectedDepartment] = useState('')
+  const [selectedBranch, setSelectedBranch] = useState('all')
+  const [selectedDepartment, setSelectedDepartment] = useState('all')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
 
@@ -41,7 +41,7 @@ export function PayrollLedgerPage() {
                   <SelectValue placeholder="All Branches" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Branches</SelectItem>
+                  <SelectItem value="all">All Branches</SelectItem>
                   {branches.map((branch) => (
                     <SelectItem key={branch} value={branch}>
                       {branch}
@@ -58,7 +58,7 @@ export function PayrollLedgerPage() {
                   <SelectValue placeholder="All Departments" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Departments</SelectItem>
+                  <SelectItem value="all">All Departments</SelectItem>
                   {departments.map((dept) => (
                     <SelectItem key={dept} value={dept}>
                       {dept}
