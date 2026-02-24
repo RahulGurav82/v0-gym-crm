@@ -123,8 +123,6 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
               <TableHead className="text-xs font-semibold text-gray-700">OT Rate</TableHead>
               <TableHead className="text-xs font-semibold text-gray-700">Paid Leave Pay</TableHead>
               <TableHead className="text-xs font-semibold text-gray-700">Bonus Pay</TableHead>
-
-              {/* Income Tax Section */}
               <TableHead colSpan={4} className="text-center text-xs font-semibold text-gray-700 border-l">
                 Income Tax Deductions
               </TableHead>
