@@ -1,4 +1,4 @@
-import { EmployeeSalaryLedgerPage } from '@/components/payroll/employee-salary-ledger-page'
+import { EmployeeSalaryLedgerPage as EmployeeSalaryLedger } from '@/components/payroll/employee-salary-ledger-page'
 
 export const metadata = {
   title: 'Employee Salary Ledger',
@@ -6,5 +6,5 @@ export const metadata = {
 }
 
 export default function EmployeeSalaryLedgerPage() {
-  return <EmployeeSalaryLedgerPage />
+  return <EmployeeSalaryLedger />
 }
