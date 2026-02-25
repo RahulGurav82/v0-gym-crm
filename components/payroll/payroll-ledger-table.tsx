@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Eye, DollarSign } from 'lucide-react'
@@ -28,6 +29,7 @@ interface PayrollLedgerTableProps {
 }
 
 export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
+  const router = useRouter()
   const [selectedEmployee, setSelectedEmployee] = useState<PayrollRow | null>(null)
   const [showDetails, setShowDetails] = useState(false)
 
@@ -162,8 +164,7 @@ export function PayrollLedgerTable({ data }: PayrollLedgerTableProps) {
   }
 
   const handleView = (row: PayrollRow) => {
-    setSelectedEmployee(row)
-    setShowDetails(true)
+    router.push(`/admin/payroll/employee-ledger`)
   }
 
   return (
